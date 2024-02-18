@@ -11,3 +11,30 @@
         classic: yes
       tags:
         - vscode
+
+    - name: Installation de GitHub Desktop sur Ubuntu (pas de canal officiel)
+      block:
+        - name: Téléchargement de la clef PGP du dépôt
+          become: yes
+          apt_key:
+            url: https://apt.packages.shiftkey.dev/gpg.key
+            keyring: /usr/share/keyrings/ansible_shiftkey_repo-archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt GitHub Desktop
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_shiftkey_repo-archive-keyring.gpg]
+              https://apt.packages.shiftkey.dev/ubuntu/
+              any
+              main
+            filename: ansible_shiftkey_repo
+            state: present
+        - name: Installation de GitHub Desktop
+          become: yes
+          package:
+            name: github-desktop
+            state: latest
+      tags:
+        - github-desktop

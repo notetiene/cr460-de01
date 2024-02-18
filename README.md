@@ -20,6 +20,11 @@ Fonctionnalités
 
  1. [VS Code](https://code.visualstudio.com/)
     1. Installation (paquet snap)
+ 2. [GitHub Desktop](https://desktop.github.com/)
+    1. Configuration du
+       [dépôt](https://gist.github.com/berkorbay/6feda478a00b0432d13f1fc0a50467f1)
+       (non-officiel)
+    2. Installation
 
 Prérequis
 ----------
