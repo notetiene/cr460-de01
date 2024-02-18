@@ -65,3 +65,30 @@
             state: latest
       tags:
         - github-cli
+
+    - name: Installation de Terraform
+      block:
+        - name: Téléchargement de la clef PGP de HashiCorp
+          become: yes
+          apt_key:
+            url: https://apt.releases.hashicorp.com/gpg
+            keyring: /usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt de HashiCorp
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg]
+              https://apt.releases.hashicorp.com
+              {{ ansible_distribution_release }}
+              main
+            filename: ansible_hashicorp
+            state: present
+        - name: Installation de Terraform
+          become: yes
+          package:
+            name: terraform
+            state: latest
+      tags:
+        - terraform

@@ -28,6 +28,9 @@ Fonctionnalités
  3. [GitHub CLI](https://cli.github.com/)
     1. Configuration du
        [dépôt](https://github.com/cli/cli/blob/trunk/docs/install_linux.md)
+ 4. [Terraform](https://www.terraform.io/)
+    1. Configuration du [dépôt
+       HashiCorp](https://developer.hashicorp.com/terraform/cli/install/apt)
     2. Installation
 
 Prérequis
