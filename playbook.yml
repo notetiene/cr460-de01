@@ -1,3 +1,13 @@
 ---
-- name: Installer les logiciels du DE01 cours CR460
+- name: Installation des logiciels du DE01 cours CR460
   hosts: localhost
+  tasks:
+    - name: Installation de VSCode
+      become: yes
+      snap:
+        name: code
+        channel: latest/stable
+        state: present
+        classic: yes
+      tags:
+        - vscode
