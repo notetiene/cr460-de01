@@ -1,0 +1,3 @@
+---
+- name: Installer les logiciels du DE01 cours CR460
+  hosts: localhost
