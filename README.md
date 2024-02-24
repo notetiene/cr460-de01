@@ -32,6 +32,10 @@ Fonctionnalités
     1. Configuration du [dépôt
        HashiCorp](https://developer.hashicorp.com/terraform/cli/install/apt)
     2. Installation
+ 4. [Azure CLI](https://github.com/Azure/azure-cli)
+    1. Configuratoin du dépôt [Azure
+       CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-2-step-by-step-installation-instructions)
+    2. Installation
 
 Prérequis
 ----------

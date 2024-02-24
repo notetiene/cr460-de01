@@ -92,3 +92,30 @@
             state: latest
       tags:
         - terraform
+
+    - name: Installation de Azure CLI
+      block:
+        - name: Téléchargement de la clef PGP de Microsoft
+          become: yes
+          apt_key:
+            url: https://packages.microsoft.com/keys/microsoft.asc
+            keyring: /usr/share/keyrings/ansible_microsoft_archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt de Azure CLI
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_microsoft_archive-keyring.gpg]
+              https://packages.microsoft.com/repos/azure-cli/
+              {{ ansible_distribution_release }}
+              main
+            filename: ansible_microsoft_azure-cli
+            state: present
+        - name: Installation de Azure CLI
+          become: yes
+          package:
+            name: azure-cli
+            state: latest
+      tags:
+        - azure-cli
