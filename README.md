@@ -139,6 +139,23 @@ Retrieved token for user notetiene
    $ scripts/setup.sh
 ```
 
+### Activation de Azure CLI
+
+Après l’installation d’azure CLI, la commande suivante doit être
+entrée pour lier le compte avec l’utilitaire :
+
+```bash
+az login
+```
+
+Une fenêtre demandera la connexion au compte :
+
+![Choix du compte Azure](./docs/az_login_page.png)
+
+Si l’opération est réussie, une affichera ceci :
+
+![Succès de connexion az](./docs/az_login_success.png)
+
 License
 -------
 
