@@ -213,7 +213,7 @@ Une fenêtre affichant la réussite :
 ![Activation de GH CLI](./docs/gh_activation_success.png)
 
 ```bash
-REPO_NAME=cr460-de01-2
+REPO_NAME=cr460-de01
 gh repo create $REPO_NAME --public
 REPO_SSH="$(gh repo view $REPO_NAME --json sshUrl | jq -r '.sshUrl')"
 git clone $REPO_SSH $REPO_NAME
@@ -221,9 +221,9 @@ cd $REPO_NAME
 ```
 
 ```console
-✓ Created repository notetiene/cr460-de01-2 on GitHub
-  https://github.com/notetiene/cr460-de01-2
-Cloning into 'cr460-de01-2'...
+✓ Created repository notetiene/cr460-de01 on GitHub
+  https://github.com/notetiene/cr460-de01
+Cloning into 'cr460-de01'...
 warning: You appear to have cloned an empty repository.
 ```
 
