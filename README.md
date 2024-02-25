@@ -237,6 +237,49 @@ gh repo edit notetiene/cr460-de01 --description "Devoir 01 pour le cours CR460"
 ✓ Edited repository notetiene/cr460-de01
 ```
 
+Ajout du jeton Terraform à GitHub (secret)
+-----------------------------------------------
+Afin de préserver la confidentialité du jeton (token) de l’API
+terraform, celui-ci doit être enregistré dans les secrets du dépôt.
+
+Exécuter :
+
+```bash
+REPO_NAME=cr460-de01
+GH_USER=notetiene
+gh secret set --repo $GH_USER/$REPO_NAME \
+   --app actions \
+   TF_API_TOKEN
+```
+
+Entrer la clef d’API pour terraform :
+
+```console
+? Paste your secret XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+✓ Set Actions secret TF_API_TOKEN for notetiene/cr460-de01
+`````
+
+Vérifier la présence du secret :
+
+```bash
+REPO_NAME=cr460-de01
+GH_USER=notetiene
+gh secret list --repo $GH_USER/$REPO_NAME --json name,numSelectedRepos,selectedReposURL,updatedAt,visibility
+```
+
+```json
+[
+  {
+    "name": "TF_API_TOKEN",
+    "numSelectedRepos": 0,
+    "selectedReposURL": "",
+    "updatedAt": "2024-02-25T01:55:50Z",
+    "visibility": ""
+  }
+]
+```
+
 License
 -------
 
