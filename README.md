@@ -65,6 +65,80 @@ Dans le répertoire, exécuter le playbook (et voir les changements) :
 ansible-playbook --ask-become-pass -v playbook.yml --diff
 ```
 
+### Activation de Terraform cloud
+
+**Note** : Cette étape est non nécessaire pour l’utilisation du
+pipeline, elle est cependant très utile pour le développement local.
+
+Après l’installation de Terraform, la commande suivante doit être
+entrée pour lier le compte avec l’utilitaire :
+
+```bash
+terraform login
+```
+
+```console
+If login is successful, Terraform will store the token in plain text in
+the following file for use by subsequent commands:
+    /home/etienne/.terraform.d/credentials.tfrc.json
+
+*Do you want to proceed?*
+  Only 'yes' will be accepted to confirm.
+
+  *Enter a value:* yes
+
+```
+
+Entrer `yes`
+
+Par la suite, se connecter à terraform dans le navigateur:
+
+![Connexion Terraform cloud](./docs/terraform_cloud_login.png)
+
+
+```console
+---------------------------------------------------------------------------------
+
+Terraform must now open a web browser to the tokens page for app.terraform.io.
+
+If a browser does not open this automatically, open the following URL to proceed:
+    https://app.terraform.io/app/settings/tokens?source=terraform-login
+
+
+Token for app.terraform.io:
+  Enter a value: 
+
+
+Retrieved token for user notetiene
+
+
+---------------------------------------------------------------------------------
+
+                                          -                                
+                                          -----                           -
+                                          ---------                      --
+                                          ---------  -                -----
+                                           ---------  ------        -------
+                                             -------  ---------  ----------
+                                                ----  ---------- ----------
+                                                  --  ---------- ----------
+   Welcome to Terraform Cloud!                     -  ---------- -------
+                                                      ---  ----- ---
+   Documentation: terraform.io/docs/cloud             --------   -
+                                                      ----------
+                                                      ----------
+                                                       ---------
+                                                           -----
+                                                               -
+
+
+   New to TFC? Follow these steps to instantly apply an example configuration:
+
+   $ git clone https://github.com/hashicorp/tfc-getting-started.git
+   $ cd tfc-getting-started
+   $ scripts/setup.sh
+```
+
 License
 -------
 
