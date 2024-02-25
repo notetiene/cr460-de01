@@ -156,6 +156,19 @@ Si l’opération est réussie, une affichera ceci :
 
 ![Succès de connexion az](./docs/az_login_success.png)
 
+Création d’un dépôt git
+--------------------------
+Dans un répertoire, créer un dépôt git :
+
+```bash
+mkdir cr460-de01 && cd cr460-de01
+git init
+```
+
+```console
+Initialized empty Git repository in /home/etienne/cr460-de01/.git/
+```
+
 License
 -------
 
