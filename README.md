@@ -25,6 +25,10 @@ Fonctionnalités
        [dépôt](https://gist.github.com/berkorbay/6feda478a00b0432d13f1fc0a50467f1)
        (non-officiel)
     2. Installation
+ 3. [GitHub CLI](https://cli.github.com/)
+    1. Configuration du
+       [dépôt](https://github.com/cli/cli/blob/trunk/docs/install_linux.md)
+    2. Installation
 
 Prérequis
 ----------

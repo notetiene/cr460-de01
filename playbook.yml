@@ -38,3 +38,30 @@
             state: latest
       tags:
         - github-desktop
+
+    - name: Installation de GitHub CLI sur Ubuntu
+      block:
+        - name: Téléchargement de la clef PGP du dépôt
+          become: yes
+          apt_key:
+            url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+            keyring: /usr/share/keyrings/ansible_githubcli_repo-archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt GitHub CLI
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_githubcli_repo-archive-keyring.gpg]
+              https://cli.github.com/packages
+              stable
+              main
+            filename: ansible_shiftkey_repo
+            state: present
+        - name: Installation de GitHub CLI
+          become: yes
+          package:
+            name: gh
+            state: latest
+      tags:
+        - github-cli
