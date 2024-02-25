@@ -119,3 +119,11 @@
             state: latest
       tags:
         - azure-cli
+
+    - name: Installation de jq
+      become: yes
+      package:
+        name: jq
+        state: latest
+      tags:
+        - jq

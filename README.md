@@ -36,6 +36,8 @@ Fonctionnalités
     1. Configuratoin du dépôt [Azure
        CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-2-step-by-step-installation-instructions)
     2. Installation
+ 5. [jq](https://jqlang.github.io/jq/)
+    1. Installation
 
 Prérequis
 ----------
