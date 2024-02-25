@@ -169,6 +169,74 @@ git init
 Initialized empty Git repository in /home/etienne/cr460-de01/.git/
 ```
 
+Création d’un dépôt distant avec GitHub
+--------------------------------------------
+
+```bash
+gh auth login
+```
+
+```console
+? What account do you want to log into?  [Use arrows to move, type to filter]
+> GitHub.com
+  GitHub Enterprise Server
+ ? What is your preferred protocol for Git operations on this host?  [Use arrows to move, type to filter]
+  HTTPS
+> SSH
+? Upload your SSH public key to your GitHub account? ~/.ssh/XXXX.pub
+? Title for your SSH key: GitHub CLI
+? How would you like to authenticate GitHub CLI?  [Use arrows to move, type to filter]
+> Login with a web browser
+  Paste an authentication token
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+! First copy your one-time code: XXXX-XXXX
+Press Enter to open github.com in your browser...
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+✓ SSH key already existed on your GitHub account: ~/.ssh/XXXX.pub
+✓ Logged in as notetiene
+```
+
+
+Une fenêtre ouvrira demander le code d’autorisation :
+
+![Code d'activation GH CLI](./docs/gh_activation_otp.png)
+
+Autoriser l’appliation (GitHub CLI) :
+
+![Autorisation pour GH CLI](./docs/gh_activation_authorization.png)
+
+Une fenêtre affichant la réussite :
+
+![Activation de GH CLI](./docs/gh_activation_success.png)
+
+```bash
+REPO_NAME=cr460-de01-2
+gh repo create $REPO_NAME --public
+REPO_SSH="$(gh repo view $REPO_NAME --json sshUrl | jq -r '.sshUrl')"
+git clone $REPO_SSH $REPO_NAME
+cd $REPO_NAME
+```
+
+```console
+✓ Created repository notetiene/cr460-de01-2 on GitHub
+  https://github.com/notetiene/cr460-de01-2
+Cloning into 'cr460-de01-2'...
+warning: You appear to have cloned an empty repository.
+```
+
+Ajout de description au dépôt :
+
+```bash
+gh repo edit notetiene/cr460-de01 --description "Devoir 01 pour le cours CR460"
+```
+
+```console
+✓ Edited repository notetiene/cr460-de01
+```
+
 License
 -------
 
