@@ -23,3 +23,8 @@ terraform {
     }
   }
 }
+
+resource "azurerm_resource_group" "cr460-de01" {
+  name     = "cr460-de01-resources"
+  location = "Canada East"
+}
