@@ -46,3 +46,10 @@ resource "azurerm_virtual_network" "cr460-de01" {
     environment = "cr460"
   }
 }
+
+resource "azurerm_ssh_public_key" "cr460-de01" {
+  name                = "cr460-de01-sshkey"
+  location            = azurerm_resource_group.cr460-de01.location
+  resource_group_name = azurerm_resource_group.cr460-de01.name
+  public_key          = file("cr640-de01.pub")
+}
