@@ -20,6 +20,7 @@ Devoir 1 pour le cours CR460
     - [Mise à jour du dépôt suivi (_remote_)](#mise-à-jour-du-dépôt-suivi-_remote_)
   - [Terraform CLI et Terraform cloud](#terraform-cli-et-terraform-cloud)
     - [Installation de Terraform CLI](#installation-de-terraform-cli)
+    - [Test de Terraform CLI](#test-de-terraform-cli)
 
 <!-- markdown-toc end -->
 
@@ -613,3 +614,53 @@ localhost                  : ok=4    changed=3    unreachable=0    failed=0    s
 </details>
 
 > 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) du dépôt officiel.  Le dépôt est aussi configuré.  Finalement, le paquet `terraform` est installé.
+
+### Test de Terraform CLI
+> ⚠️ **Note :** Considérant que le devoir exige la mise en place de la pratique CI/CD, l’étape de création des ressources (`plan` et  `apply`) ne s’effectuera pas sur une machine locale.
+
+Exécuter la commande d’initialisation de terraform dans la copie du dépôt :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME
+terraform init
+```
+
+<details>
+  <summary>Résultats de l’initialisation de <code>terraform init</code> :</summary>
+
+```console
+Initializing the backend...
+
+Successfully configured the backend "remote"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Finding latest version of hashicorp/azurerm...
+- Installing hashicorp/azurerm v3.95.0...
+- Installed hashicorp/azurerm v3.95.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+</details>
+
+> 💡 **Explications** : Terraform analyse les fichiers de langage `.tf` pour configurer le répertoire courant à l’exécution d’étapes ultérieures.
+
+Supprimer les fichiers d’initialisation :
+
+```bash
+rm -Rf .terraform/ .terraform.lock.hcl
+```
