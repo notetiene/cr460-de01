@@ -18,6 +18,8 @@ Devoir 1 pour le cours CR460
       - [Ajout du premier commit](#ajout-du-premier-commit)
     - [Création d’un dépôt distant avec GitHub](#création-dun-dépôt-distant-avec-github)
     - [Mise à jour du dépôt suivi (_remote_)](#mise-à-jour-du-dépôt-suivi-_remote_)
+  - [Terraform CLI et Terraform cloud](#terraform-cli-et-terraform-cloud)
+    - [Installation de Terraform CLI](#installation-de-terraform-cli)
 
 <!-- markdown-toc end -->
 
@@ -533,3 +535,81 @@ branch 'main' set up to track 'origin/main'.
 Everything up-to-date
 ```
 </details>
+
+## Terraform CLI et Terraform cloud
+### Installation de Terraform CLI
+Pour n’installer que Terraform, exécuter localement la commande suivante :
+
+```bash
+ansible-playbook --ask-become-pass -v playbook.yml --diff --tags terraform
+```
+
+<details>
+  <summary>Résultats de l’exécution du playbook :</summary>
+
+```console
+Using /etc/ansible/ansible.cfg as config file
+BECOME password: XXXXXX
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [Installation des logiciels du DE01 cours CR460] ******************************************************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Téléchargement de la clef PGP de HashiCorp] **********************************************************************************************************************************************************
+changed: [localhost] => {"after": ["AA16FCBCA621E701", "706E668369C085E9"], "before": [], "changed": true, "fp": "AA16FCBCA621E701", "id": "AA16FCBCA621E701", "key_id": "AA16FCBCA621E701", "short_id": "A621E701"}
+
+TASK [Ajout du dépôt de HashiCorp] *************************************************************************************************************************************************************************
+--- before: /dev/null
++++ after: /etc/apt/sources.list.d/ansible_hashicorp.list
+@@ -0,0 +1 @@
++deb [arch=amd64 signed-by=/usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main
+
+changed: [localhost] => {"changed": true, "repo": "deb [arch=amd64 signed-by=/usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main", "sources_added": ["/etc/apt/sources.list.d/ansible_hashicorp.list"], "sources_removed": [], "state": "present"}
+
+TASK [Installation de Terraform] ***************************************************************************************************************************************************************************
+Lecture des listes de paquets…
+Construction de l'arbre des dépendances…
+Lecture des informations d'état…
+Les NOUVEAUX paquets suivants seront installés :
+  terraform
+0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.
+Il est nécessaire de prendre 26.9 Mo dans les archives.
+Après cette opération, 84.5 Mo d'espace disque supplémentaires seront utilisés.
+Réception de :1 https://apt.releases.hashicorp.com jammy/main amd64 terraform amd64 1.7.4-1 [26.9 MB]
+26.9 Mo réceptionnés en 3s (7794 ko/s)
+Sélection du paquet terraform précédemment désélectionné.
+(Lecture de la base de données... 
+(Lecture de la base de données... 5%
+(Lecture de la base de données... 10%
+(Lecture de la base de données... 15%
+(Lecture de la base de données... 20%
+(Lecture de la base de données... 25%
+(Lecture de la base de données... 30%
+(Lecture de la base de données... 35%
+(Lecture de la base de données... 40%
+(Lecture de la base de données... 45%
+(Lecture de la base de données... 50%
+(Lecture de la base de données... 55%
+(Lecture de la base de données... 60%
+(Lecture de la base de données... 65%
+(Lecture de la base de données... 70%
+(Lecture de la base de données... 75%
+(Lecture de la base de données... 80%
+(Lecture de la base de données... 85%
+(Lecture de la base de données... 90%
+(Lecture de la base de données... 95%
+(Lecture de la base de données... 100%
+(Lecture de la base de données... 438148 fichiers et répertoires déjà installés.)
+Préparation du dépaquetage de .../terraform_1.7.4-1_amd64.deb ...
+Dépaquetage de terraform (1.7.4-1) ...
+Paramétrage de terraform (1.7.4-1) ...
+changed: [localhost] => {"cache_update_time": 1710051781, "cache_updated": false, "changed": true, "stderr": "", "stderr_lines": [], "stdout": "Lecture des listes de paquets…\nConstruction de l'arbre des dépendances…\nLecture des informations d'état…\nLes NOUVEAUX paquets suivants seront installés :\n  terraform\n0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.\nIl est nécessaire de prendre 26.9 Mo dans les archives.\nAprès cette opération, 84.5 Mo d'espace disque supplémentaires seront utilisés.\nRéception de :1 https://apt.releases.hashicorp.com jammy/main amd64 terraform amd64 1.7.4-1 [26.9 MB]\n26.9 Mo réceptionnés en 3s (7794 ko/s)\nSélection du paquet terraform précédemment désélectionné.\r\n(Lecture de la base de données... \r(Lecture de la base de données... 5%\r(Lecture de la base de données... 10%\r(Lecture de la base de données... 15%\r(Lecture de la base de données... 20%\r(Lecture de la base de données... 25%\r(Lecture de la base de données... 30%\r(Lecture de la base de données... 35%\r(Lecture de la base de données... 40%\r(Lecture de la base de données... 45%\r(Lecture de la base de données... 50%\r(Lecture de la base de données... 55%\r(Lecture de la base de données... 60%\r(Lecture de la base de données... 65%\r(Lecture de la base de données... 70%\r(Lecture de la base de données... 75%\r(Lecture de la base de données... 80%\r(Lecture de la base de données... 85%\r(Lecture de la base de données... 90%\r(Lecture de la base de données... 95%\r(Lecture de la base de données... 100%\r(Lecture de la base de données... 438148 fichiers et répertoires déjà installés.)\r\nPréparation du dépaquetage de .../terraform_1.7.4-1_amd64.deb ...\r\nDépaquetage de terraform (1.7.4-1) ...\r\nParamétrage de terraform (1.7.4-1) ...\r\n", "stdout_lines": ["Lecture des listes de paquets…", "Construction de l'arbre des dépendances…", "Lecture des informations d'état…", "Les NOUVEAUX paquets suivants seront installés :", "  terraform", "0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.", "Il est nécessaire de prendre 26.9 Mo dans les archives.", "Après cette opération, 84.5 Mo d'espace disque supplémentaires seront utilisés.", "Réception de :1 https://apt.releases.hashicorp.com jammy/main amd64 terraform amd64 1.7.4-1 [26.9 MB]", "26.9 Mo réceptionnés en 3s (7794 ko/s)", "Sélection du paquet terraform précédemment désélectionné.", "(Lecture de la base de données... ", "(Lecture de la base de données... 5%", "(Lecture de la base de données... 10%", "(Lecture de la base de données... 15%", "(Lecture de la base de données... 20%", "(Lecture de la base de données... 25%", "(Lecture de la base de données... 30%", "(Lecture de la base de données... 35%", "(Lecture de la base de données... 40%", "(Lecture de la base de données... 45%", "(Lecture de la base de données... 50%", "(Lecture de la base de données... 55%", "(Lecture de la base de données... 60%", "(Lecture de la base de données... 65%", "(Lecture de la base de données... 70%", "(Lecture de la base de données... 75%", "(Lecture de la base de données... 80%", "(Lecture de la base de données... 85%", "(Lecture de la base de données... 90%", "(Lecture de la base de données... 95%", "(Lecture de la base de données... 100%", "(Lecture de la base de données... 438148 fichiers et répertoires déjà installés.)", "Préparation du dépaquetage de .../terraform_1.7.4-1_amd64.deb ...", "Dépaquetage de terraform (1.7.4-1) ...", "Paramétrage de terraform (1.7.4-1) ..."]}
+
+PLAY RECAP *************************************************************************************************************************************************************************************************
+localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+</details>
+
+> 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) du dépôt officiel.  Le dépôt est aussi configuré.  Finalement, le paquet `terraform` est installé.
