@@ -25,6 +25,7 @@ Devoir 1 pour le cours CR460
   - [Configuration du compte Microsoft Azure](#configuration-du-compte-microsoft-azure)
     - [Installation de Azure CLI](#installation-de-azure-cli)
     - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
+    - [Création du _service principal_](#création-du-_service-principal_)
 
 <!-- markdown-toc end -->
 
@@ -893,3 +894,39 @@ A web browser has been opened at https://login.microsoftonline.com/organizations
 </details>
 
 > 💡 **Explications** : L’utilitaire az effectue enregistre des informations permettant de s’authentifier auprès d’Azure.
+
+### Création du _service principal_
+Afin de gérer l’accès aux nouvelles ressources, nous devons créer un [_service principal_](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser).
+
+Dans un shell de type _[POSIX](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)_, exécuter localement ceci :
+
+```bash
+# Utiliser le premier abonnement disponible
+subscription_id=$(az account list --query "[0].id" --output tsv)
+# Création d'un service principal
+cat <(az ad sp create-for-rbac \
+      --role="Contributor" \
+      --scopes="/subscriptions/$subscription_id" \
+      --name="git@github.com\:notetiene/cr460-de01.git") <(
+    # Ajout de la propriété
+    echo "{\"subscription_id\": \"$subscription_id\"}") |
+    # Fusion des deux objets JSON
+    jq -s '.[0] * .[1]' |
+    # Mappage de propriétés Azure vers Terraform
+    jq '. |= { client_id: .appId, client_secret: .password, tenant_id: .tenant, subscription_id}'
+```
+
+<details>
+  <summary>Résultats de la commande :</summary>
+
+```json
+{
+  "client_id": "CLIENT_ID_CLIENT_ID_CLIENT_ID_CLIENT",
+  "client_secret": "CLIENT_SECRET_CLIENT_SECRET_CLIENT_SECRE",
+  "tenant_id": "TENANT_ID_TENANT_ID_TENANT_ID_TENANT",
+  "subscription_id": "SUBSCRIPTION_ID_SUBSCRIPTION_ID_SUBS"
+}
+```
+</details>
+
+> 💡 **Explications** : La commande permet de créer un nouveau service principal et de récupérer des informations utile lors de l’arrimage de de Terraform et Azure.
