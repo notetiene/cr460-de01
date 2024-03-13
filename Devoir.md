@@ -24,6 +24,7 @@ Devoir 1 pour le cours CR460
     - [Activation de Terraform cloud](#activation-de-terraform-cloud)
   - [Configuration du compte Microsoft Azure](#configuration-du-compte-microsoft-azure)
     - [Installation de Azure CLI](#installation-de-azure-cli)
+    - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
 
 <!-- markdown-toc end -->
 
@@ -851,3 +852,44 @@ localhost                  : ok=4    changed=3    unreachable=0    failed=0    s
 </details>
 
 > 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) du dépôt d’Azure cli.  Le dépôt est aussi configuré.  Finalement, le paquet `azure-cli` est installé.
+
+### Connexion au compte Azure (utilitaire `az`)
+Lier le compte avec Azure CLI (`az`) en exécutant localement :
+
+```bash
+az login
+```
+
+L’utilitaire ouvrira une page du navigateur demandant de se connecter (ou choisir un compte connecté).  Choisir le compte à lier :
+
+![Connexion à Azure avec az](./docs/az_login_page.png)
+
+Lors d’une tentative de connexion réussie, un message s’affichera :
+
+![Connexion à Azure avec az réussie](./docs/az_login_success.png)
+
+<details>
+  <summary>Résultats de la commande <code>az login</code> :</summary>
+
+```console
+A web browser has been opened at https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, use device code flow with `az login --use-device-code`.
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "HOME_TENANT_ID_HOME_TENANT_ID_HOME_T",
+    "id": "ID_ID_ID_ID_ID_ID_ID_ID_ID_ID_ID_ID_",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "Azure subscription 1",
+    "state": "Enabled",
+    "tenantId": "TENANT_ID_TENANT_ID_TENANT_ID_TENANT",
+    "user": {
+      "name": "MAIL@MAIL.com",
+      "type": "user"
+    }
+  }
+]
+```
+</details>
+
+> 💡 **Explications** : L’utilitaire az effectue enregistre des informations permettant de s’authentifier auprès d’Azure.
