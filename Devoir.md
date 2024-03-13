@@ -17,6 +17,7 @@ Devoir 1 pour le cours CR460
     - [Création d’un dépôt local Git](#création-dun-dépôt-local-git)
       - [Ajout du premier commit](#ajout-du-premier-commit)
     - [Création d’un dépôt distant avec GitHub](#création-dun-dépôt-distant-avec-github)
+    - [Mise à jour du dépôt suivi (_remote_)](#mise-à-jour-du-dépôt-suivi-_remote_)
 
 <!-- markdown-toc end -->
 
@@ -485,3 +486,50 @@ gh repo edit notetiene/cr460-de01 --description "Devoir 01 pour le cours CR460"
 </details>
 
 > 💡 **Explications** : Cette commande configure le message d’affichage du nouveau dépôt créé (GitHub).
+
+### Mise à jour du dépôt suivi (_remote_)
+L’URL SSH du dépôt distant doit être récupérée :
+
+```bash
+REPO_NAME=cr460-de01
+REPO_SSH="$(gh repo view $REPO_NAME --json sshUrl | jq -r '.sshUrl')"
+```
+
+> 💡 **Explications** : Cette commande récupère l’URL distant configuré du dépôt sur GitHub (en format JSON).  L’utilitaire `jq` ne récupère que le champs `sshUrl`.
+
+Ajouter le distant (en utilisant le nom `origin`) et l’URL SSH.  Forcer la synchronisation :
+
+```bash
+cd ~/$REPO_NAME
+git remote add -f origin $REPO_SSH
+```
+
+<details>
+  <summary>Mise à jour du distant :</summary>
+
+```console
+Updating origin
+remote: Enumerating objects: 119, done.
+remote: Counting objects: 100% (119/119), done.
+remote: Compressing objects: 100% (69/69), done.
+remote: Total 119 (delta 64), reused 103 (delta 48), pack-reused 0
+Receiving objects: 100% (119/119), 684.24 KiB | 4.22 MiB/s, done.
+Resolving deltas: 100% (64/64), done.
+From github.com:notetiene/cr460-de01
+ * [new branch]      main       -> origin/main
+```
+</details>
+Configurer branche en amont par défaut :
+
+```bash
+git push --set-upstream origin main
+```
+
+<details>
+  <summary>Résultats de la commande :</summary>
+
+```console
+branch 'main' set up to track 'origin/main'.
+Everything up-to-date
+```
+</details>
