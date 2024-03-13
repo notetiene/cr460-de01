@@ -10,6 +10,8 @@ Devoir 1 pour le cours CR460
   - [Installation et configuration de VS Code](#installation-et-configuration-de-vs-code)
   - [Installation et configuration de GitHub Desktop (et Git)](#installation-et-configuration-de-github-desktop-et-git)
     - [Configuration de GitHub Desktop](#configuration-de-github-desktop)
+    - [GitHub CLI](#github-cli)
+      - [Installation de GitHub CLI](#installation-de-github-cli)
 
 <!-- markdown-toc end -->
 
@@ -148,3 +150,77 @@ Remplir les configuration de Git pour GitHub Desktop :
 Aperçu de GitHub Desktop sous Ubuntu :
 
 ![GitHub Desktop](./docs/github_desktop_window.png)
+
+### GitHub CLI
+> 📝 **Note :** Cette étape est requise pour la création automatique de dépôts distants par ligne de commande.
+
+#### Installation de GitHub CLI
+Pour n’installer que GitHub CLI, exécuter localement la commande suivante :
+
+```bash
+ansible-playbook --ask-become-pass -v playbook.yml --diff --tags github-cli
+```
+
+<details>
+  <summary>Résultats de l’exécution du playbook :</summary>
+
+```console
+Using /etc/ansible/ansible.cfg as config file
+BECOME password: XXXXXX
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [Installation des logiciels du DE01 cours CR460] ******************************************************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Téléchargement de la clef PGP du dépôt] **************************************************************************************************************************************************************
+changed: [localhost] => {"after": ["23F3D4EA75716059", "E5FAF19590714157"], "before": [], "changed": true, "fp": "23F3D4EA75716059", "id": "23F3D4EA75716059", "key_id": "23F3D4EA75716059", "short_id": "75716059"}
+
+TASK [Ajout du dépôt GitHub CLI] ***************************************************************************************************************************************************************************
+changed: [localhost] => {"changed": true, "repo": "deb [arch=amd64 signed-by=/usr/share/keyrings/ansible_githubcli_repo-archive-keyring.gpg] https://cli.github.com/packages stable main", "sources_added": [], "sources_removed": [], "state": "present"}
+
+TASK [Installation de GitHub CLI] **************************************************************************************************************************************************************************
+Lecture des listes de paquets…
+Construction de l'arbre des dépendances…
+Lecture des informations d'état…
+Les NOUVEAUX paquets suivants seront installés :
+  gh
+0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.
+Il est nécessaire de prendre 0 o/11.3 Mo dans les archives.
+Après cette opération, 43.7 Mo d'espace disque supplémentaires seront utilisés.
+Sélection du paquet gh précédemment désélectionné.
+(Lecture de la base de données... 
+(Lecture de la base de données... 5%
+(Lecture de la base de données... 10%
+(Lecture de la base de données... 15%
+(Lecture de la base de données... 20%
+(Lecture de la base de données... 25%
+(Lecture de la base de données... 30%
+(Lecture de la base de données... 35%
+(Lecture de la base de données... 40%
+(Lecture de la base de données... 45%
+(Lecture de la base de données... 50%
+(Lecture de la base de données... 55%
+(Lecture de la base de données... 60%
+(Lecture de la base de données... 65%
+(Lecture de la base de données... 70%
+(Lecture de la base de données... 75%
+(Lecture de la base de données... 80%
+(Lecture de la base de données... 85%
+(Lecture de la base de données... 90%
+(Lecture de la base de données... 95%
+(Lecture de la base de données... 100%
+(Lecture de la base de données... 437959 fichiers et répertoires déjà installés.)
+Préparation du dépaquetage de .../archives/gh_2.45.0_amd64.deb ...
+Dépaquetage de gh (2.45.0) ...
+Paramétrage de gh (2.45.0) ...
+Traitement des actions différées (« triggers ») pour man-db (2.10.2-1) ...
+changed: [localhost] => {"cache_update_time": 1710051479, "cache_updated": false, "changed": true, "stderr": "", "stderr_lines": [], "stdout": "Lecture des listes de paquets…\nConstruction de l'arbre des dépendances…\nLecture des informations d'état…\nLes NOUVEAUX paquets suivants seront installés :\n  gh\n0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.\nIl est nécessaire de prendre 0 o/11.3 Mo dans les archives.\nAprès cette opération, 43.7 Mo d'espace disque supplémentaires seront utilisés.\nSélection du paquet gh précédemment désélectionné.\r\n(Lecture de la base de données... \r(Lecture de la base de données... 5%\r(Lecture de la base de données... 10%\r(Lecture de la base de données... 15%\r(Lecture de la base de données... 20%\r(Lecture de la base de données... 25%\r(Lecture de la base de données... 30%\r(Lecture de la base de données... 35%\r(Lecture de la base de données... 40%\r(Lecture de la base de données... 45%\r(Lecture de la base de données... 50%\r(Lecture de la base de données... 55%\r(Lecture de la base de données... 60%\r(Lecture de la base de données... 65%\r(Lecture de la base de données... 70%\r(Lecture de la base de données... 75%\r(Lecture de la base de données... 80%\r(Lecture de la base de données... 85%\r(Lecture de la base de données... 90%\r(Lecture de la base de données... 95%\r(Lecture de la base de données... 100%\r(Lecture de la base de données... 437959 fichiers et répertoires déjà installés.)\r\nPréparation du dépaquetage de .../archives/gh_2.45.0_amd64.deb ...\r\nDépaquetage de gh (2.45.0) ...\r\nParamétrage de gh (2.45.0) ...\r\nTraitement des actions différées (« triggers ») pour man-db (2.10.2-1) ...\r\n", "stdout_lines": ["Lecture des listes de paquets…", "Construction de l'arbre des dépendances…", "Lecture des informations d'état…", "Les NOUVEAUX paquets suivants seront installés :", "  gh", "0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.", "Il est nécessaire de prendre 0 o/11.3 Mo dans les archives.", "Après cette opération, 43.7 Mo d'espace disque supplémentaires seront utilisés.", "Sélection du paquet gh précédemment désélectionné.", "(Lecture de la base de données... ", "(Lecture de la base de données... 5%", "(Lecture de la base de données... 10%", "(Lecture de la base de données... 15%", "(Lecture de la base de données... 20%", "(Lecture de la base de données... 25%", "(Lecture de la base de données... 30%", "(Lecture de la base de données... 35%", "(Lecture de la base de données... 40%", "(Lecture de la base de données... 45%", "(Lecture de la base de données... 50%", "(Lecture de la base de données... 55%", "(Lecture de la base de données... 60%", "(Lecture de la base de données... 65%", "(Lecture de la base de données... 70%", "(Lecture de la base de données... 75%", "(Lecture de la base de données... 80%", "(Lecture de la base de données... 85%", "(Lecture de la base de données... 90%", "(Lecture de la base de données... 95%", "(Lecture de la base de données... 100%", "(Lecture de la base de données... 437959 fichiers et répertoires déjà installés.)", "Préparation du dépaquetage de .../archives/gh_2.45.0_amd64.deb ...", "Dépaquetage de gh (2.45.0) ...", "Paramétrage de gh (2.45.0) ...", "Traitement des actions différées (« triggers ») pour man-db (2.10.2-1) ..."]}
+
+PLAY RECAP *************************************************************************************************************************************************************************************************
+localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+</details>
+
+> 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) du dépôt officiel.  Le dépôt est aussi configuré.  Finalement, le paquet `gh` est installé.
