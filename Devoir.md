@@ -15,6 +15,7 @@ Devoir 1 pour le cours CR460
       - [Installation de GitHub CLI](#installation-de-github-cli)
       - [Connexion de GitHub CLI (`gh`) au compte GitHub](#connexion-de-github-cli-gh-au-compte-github)
     - [Création d’un dépôt local Git](#création-dun-dépôt-local-git)
+      - [Ajout du premier commit](#ajout-du-premier-commit)
 
 <!-- markdown-toc end -->
 
@@ -404,3 +405,47 @@ Initialized empty Git repository in /home/etienne/cr460-de01/.git/
 </details>
 
 > 💡 **Explications** : Cette commande crée et accède à un nouveau répertoire.  Un dépôt vide (Git) est par la suite initialisé.
+
+#### Ajout du premier commit
+Pour permettre de créer un premier commit, créer un fichier vide :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME
+touch README.md
+```
+
+> 💡 **Explications** : Cette commande crée un fichier vide dans le répertoire du dépôt.
+
+Ajout du fichier vide dans l’index :
+```bash
+git add README.md
+```
+
+(Vérification de l’index (_staging area_))
+
+```bash
+git status
+```
+
+<details>
+  <summary>Résultats de la commande :</summary>
+
+```console
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   README.md
+```
+</details>
+
+Créer le premier commit :
+
+```bash
+git commit -m "Premier commit"
+```
+
+> 💡 **Explications** : Cette commande créée un commit avec l’index courant en utilisant le message « Premier commit ».
