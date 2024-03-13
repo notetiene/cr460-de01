@@ -9,6 +9,7 @@ Devoir 1 pour le cours CR460
   - [Prérequis](#prérequis)
   - [Installation et configuration de VS Code](#installation-et-configuration-de-vs-code)
   - [Installation et configuration de GitHub Desktop (et Git)](#installation-et-configuration-de-github-desktop-et-git)
+    - [Configuration de GitHub Desktop](#configuration-de-github-desktop)
 
 <!-- markdown-toc end -->
 
@@ -132,3 +133,18 @@ localhost                  : ok=4    changed=2    unreachable=0    failed=0    s
 </details>
 
 > 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) d’un dépôt (non-officiel).  Le dépôt est aussi configuré.  Finalement, le paquet `github-desktop` est installé.
+
+### Configuration de GitHub Desktop
+En lançant l’application, cliquer sur « _Sign in to GitHub.com_ » :
+
+![GitHub Desktop connexion](./docs/github_desktop_first_page.png)
+
+> ⚠️ **Attention** : Puisque mon navigateur était déjà connecté à GitHub, le processus d’authentification n’était requis.
+
+Remplir les configuration de Git pour GitHub Desktop :
+
+![GitHub Desktop Git](./docs/github_desktop_configure_git.png)
+
+Aperçu de GitHub Desktop sous Ubuntu :
+
+![GitHub Desktop](./docs/github_desktop_window.png)
