@@ -23,6 +23,7 @@ Devoir 1 pour le cours CR460
     - [Test de Terraform CLI](#test-de-terraform-cli)
     - [Activation de Terraform cloud](#activation-de-terraform-cloud)
     - [Création d’une nouvelle organisation Terraform Cloud](#création-dune-nouvelle-organisation-terraform-cloud)
+    - [Création d’un nouveau projet Terraform Cloud](#création-dun-nouveau-projet-terraform-cloud)
   - [Configuration du compte Microsoft Azure](#configuration-du-compte-microsoft-azure)
     - [Installation de Azure CLI](#installation-de-azure-cli)
     - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
@@ -895,6 +896,108 @@ tfe_organization.org: Creation complete after 1s [id=polymtl-cr460]
 > ⚠️ **Note :** Confirmer en entrant `yes`.
 
 > 💡 **Explications** : Terraform crée une organisation dans Terraform Cloud en utilisant la configuration donnée.
+
+### Création d’un nouveau projet Terraform Cloud
+Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/project.tf](./terraform-cloud/project.tf).
+
+```terraform
+# Variable declaration with default values
+variable "project_name" {
+  type        = string
+  description = "Terraform project."
+  default     = "cr460-de01"
+}
+
+# Create a new terraform cloud project
+resource "tfe_project" "project" {
+  organization = tfe_organization.org.name
+  name         = var.project_name
+}
+```
+
+Exécuter localement :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME/terraform-cloud/
+terraform init
+terraform plan
+terraform apply
+```
+
+<details>
+  <summary>Résultats de l’exécution des commandes <code>terraform</code> :</summary>
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/tfe from the dependency lock file
+- Using previously-installed hashicorp/tfe v0.52.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_project.project will be created
+  + resource "tfe_project" "project" {
+      + id           = (known after apply)
+      + name         = "cr460-de01"
+      + organization = "polymtl-cr460"
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take
+exactly these actions if you run "terraform apply" now.
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_project.project will be created
+  + resource "tfe_project" "project" {
+      + id           = (known after apply)
+      + name         = "cr460-de01"
+      + organization = "polymtl-cr460"
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+tfe_project.project: Creating...
+tfe_project.project: Creation complete after 0s [id=prj-wmnphnD1QWmaxip6]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
+</details>
+
+> ⚠️ **Note :** Confirmer en entrant `yes`.
+
+> 💡 **Explications** : Terraform crée un projet dans Terraform Cloud dans l’organisation spécifiée.
 
 ## Configuration du compte Microsoft Azure
 ### Installation de Azure CLI
