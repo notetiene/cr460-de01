@@ -7,6 +7,7 @@ Devoir 1 pour le cours CR460
 - [Devoir 1 pour le cours CR460](#devoir-1-pour-le-cours-cr460)
   - [Énoncé](#énoncé)
   - [Prérequis](#prérequis)
+    - [Installation de jq](#installation-de-jq)
   - [Installation et configuration de VS Code](#installation-et-configuration-de-vs-code)
   - [Installation et configuration de GitHub Desktop (et Git)](#installation-et-configuration-de-github-desktop-et-git)
     - [Configuration de GitHub Desktop](#configuration-de-github-desktop)
@@ -23,6 +24,75 @@ Devoir 1 pour le cours CR460
 
 ## Prérequis
 Le playbook inclus a été conçu pour fonctionner sous [Ubuntu 22.04.3](https://releases.ubuntu.com/jammy/).  Il peut (théoriquement) fonctionner avec les distributions dérivées de Debian.  Cependant, prendre note que la présente installation [VS Code](https://code.visualstudio.com/) requiert l’utilisation de [snap](https://snapcraft.io/about).
+
+### Installation de jq
+> 📝 **Note :** Cette étape est nécessaire (ou utile) pour la création automatique d’un _service principal_ en permettant d’extraire des données _JSON_.
+
+Pour n’installer que l’utilitaire `jq`, exécuter localement la commande suivante :
+
+```bash
+ansible-playbook --ask-become-pass -v playbook.yml --diff --tags jq
+```
+
+<details>
+  <summary>Résultats de l’exécution du playbook :</summary>
+
+```console
+Using /etc/ansible/ansible.cfg as config file
+BECOME password: XXXXXX
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [Installation des logiciels du DE01 cours CR460] ******************************************************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Installation de jq] **********************************************************************************************************************************************************************************
+Lecture des listes de paquets…
+Construction de l'arbre des dépendances…
+Lecture des informations d'état…
+Les NOUVEAUX paquets suivants seront installés :
+  jq
+0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.
+Il est nécessaire de prendre 52.5 ko dans les archives.
+Après cette opération, 102 ko d'espace disque supplémentaires seront utilisés.
+Réception de :1 http://gpl.savoirfairelinux.net/pub/mirrors/ubuntu jammy/main amd64 jq amd64 1.6-2.1ubuntu3 [52.5 kB]
+52.5 ko réceptionnés en 0s (476 ko/s)
+Sélection du paquet jq précédemment désélectionné.
+(Lecture de la base de données... 
+(Lecture de la base de données... 5%
+(Lecture de la base de données... 10%
+(Lecture de la base de données... 15%
+(Lecture de la base de données... 20%
+(Lecture de la base de données... 25%
+(Lecture de la base de données... 30%
+(Lecture de la base de données... 35%
+(Lecture de la base de données... 40%
+(Lecture de la base de données... 45%
+(Lecture de la base de données... 50%
+(Lecture de la base de données... 55%
+(Lecture de la base de données... 60%
+(Lecture de la base de données... 65%
+(Lecture de la base de données... 70%
+(Lecture de la base de données... 75%
+(Lecture de la base de données... 80%
+(Lecture de la base de données... 85%
+(Lecture de la base de données... 90%
+(Lecture de la base de données... 95%
+(Lecture de la base de données... 100%
+(Lecture de la base de données... 438132 fichiers et répertoires déjà installés.)
+Préparation du dépaquetage de .../jq_1.6-2.1ubuntu3_amd64.deb ...
+Dépaquetage de jq (1.6-2.1ubuntu3) ...
+Paramétrage de jq (1.6-2.1ubuntu3) ...
+Traitement des actions différées (« triggers ») pour man-db (2.10.2-1) ...
+changed: [localhost] => {"cache_update_time": 1710052522, "cache_updated": false, "changed": true, "stderr": "", "stderr_lines": [], "stdout": "Lecture des listes de paquets…\nConstruction de l'arbre des dépendances…\nLecture des informations d'état…\nLes NOUVEAUX paquets suivants seront installés :\n  jq\n0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.\nIl est nécessaire de prendre 52.5 ko dans les archives.\nAprès cette opération, 102 ko d'espace disque supplémentaires seront utilisés.\nRéception de :1 http://gpl.savoirfairelinux.net/pub/mirrors/ubuntu jammy/main amd64 jq amd64 1.6-2.1ubuntu3 [52.5 kB]\n52.5 ko réceptionnés en 0s (476 ko/s)\nSélection du paquet jq précédemment désélectionné.\r\n(Lecture de la base de données... \r(Lecture de la base de données... 5%\r(Lecture de la base de données... 10%\r(Lecture de la base de données... 15%\r(Lecture de la base de données... 20%\r(Lecture de la base de données... 25%\r(Lecture de la base de données... 30%\r(Lecture de la base de données... 35%\r(Lecture de la base de données... 40%\r(Lecture de la base de données... 45%\r(Lecture de la base de données... 50%\r(Lecture de la base de données... 55%\r(Lecture de la base de données... 60%\r(Lecture de la base de données... 65%\r(Lecture de la base de données... 70%\r(Lecture de la base de données... 75%\r(Lecture de la base de données... 80%\r(Lecture de la base de données... 85%\r(Lecture de la base de données... 90%\r(Lecture de la base de données... 95%\r(Lecture de la base de données... 100%\r(Lecture de la base de données... 438132 fichiers et répertoires déjà installés.)\r\nPréparation du dépaquetage de .../jq_1.6-2.1ubuntu3_amd64.deb ...\r\nDépaquetage de jq (1.6-2.1ubuntu3) ...\r\nParamétrage de jq (1.6-2.1ubuntu3) ...\r\nTraitement des actions différées (« triggers ») pour man-db (2.10.2-1) ...\r\n", "stdout_lines": ["Lecture des listes de paquets…", "Construction de l'arbre des dépendances…", "Lecture des informations d'état…", "Les NOUVEAUX paquets suivants seront installés :", "  jq", "0 mis à jour, 1 nouvellement installés, 0 à enlever et 1 non mis à jour.", "Il est nécessaire de prendre 52.5 ko dans les archives.", "Après cette opération, 102 ko d'espace disque supplémentaires seront utilisés.", "Réception de :1 http://gpl.savoirfairelinux.net/pub/mirrors/ubuntu jammy/main amd64 jq amd64 1.6-2.1ubuntu3 [52.5 kB]", "52.5 ko réceptionnés en 0s (476 ko/s)", "Sélection du paquet jq précédemment désélectionné.", "(Lecture de la base de données... ", "(Lecture de la base de données... 5%", "(Lecture de la base de données... 10%", "(Lecture de la base de données... 15%", "(Lecture de la base de données... 20%", "(Lecture de la base de données... 25%", "(Lecture de la base de données... 30%", "(Lecture de la base de données... 35%", "(Lecture de la base de données... 40%", "(Lecture de la base de données... 45%", "(Lecture de la base de données... 50%", "(Lecture de la base de données... 55%", "(Lecture de la base de données... 60%", "(Lecture de la base de données... 65%", "(Lecture de la base de données... 70%", "(Lecture de la base de données... 75%", "(Lecture de la base de données... 80%", "(Lecture de la base de données... 85%", "(Lecture de la base de données... 90%", "(Lecture de la base de données... 95%", "(Lecture de la base de données... 100%", "(Lecture de la base de données... 438132 fichiers et répertoires déjà installés.)", "Préparation du dépaquetage de .../jq_1.6-2.1ubuntu3_amd64.deb ...", "Dépaquetage de jq (1.6-2.1ubuntu3) ...", "Paramétrage de jq (1.6-2.1ubuntu3) ...", "Traitement des actions différées (« triggers ») pour man-db (2.10.2-1) ..."]}
+
+PLAY RECAP *************************************************************************************************************************************************************************************************
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+</details>
+
+> 💡 **Explications** : Le playbook installe le paquet `jq`.
 
 ## Installation et configuration de VS Code
 Pour n’installer que VS Code, exécuter localement la commande suivante :
