@@ -13,6 +13,7 @@ Devoir 1 pour le cours CR460
     - [Configuration de GitHub Desktop](#configuration-de-github-desktop)
     - [GitHub CLI](#github-cli)
       - [Installation de GitHub CLI](#installation-de-github-cli)
+      - [Connexion de GitHub CLI (`gh`) au compte GitHub](#connexion-de-github-cli-gh-au-compte-github)
 
 <!-- markdown-toc end -->
 
@@ -294,3 +295,92 @@ localhost                  : ok=4    changed=3    unreachable=0    failed=0    s
 </details>
 
 > 💡 **Explications** : Le playbook télécharge premièrement la clef (PGP) du dépôt officiel.  Le dépôt est aussi configuré.  Finalement, le paquet `gh` est installé.
+
+#### Connexion de GitHub CLI (`gh`) au compte GitHub
+Pour connecter l’utilitaire, exécuter localement cette commande :
+
+```bash
+gh auth login
+```
+
+<details>
+  <summary>Un invite demandera d’utiliser un type de compte.  Choisir d’utiliser GitHub.com :</summary>
+
+```console
+? What account do you want to log into?  [Use arrows to move, type to filter]
+> GitHub.com
+  GitHub Enterprise Server
+```
+</details>
+
+<details>
+  <summary>Choisir l’authentification avec SSH.  Cette méthode est plus sécuritaire :</summary>
+
+```console
+? What is your preferred protocol for Git operations on this host?  [Use arrows to move, type to filter]
+  HTTPS
+> SSH
+```
+</details>
+
+> ⚠️ **Note :** Étant donné mon utilisation de [gpg-agent](https://gist.github.com/mcattarinussi/834fc4b641ff4572018d0c665e5a94d3), ce document ne montrera pas le processus de création d’une paire de clefs SSH
+
+<details>
+  <summary>Choisir la clef publique SSH à utiliser :</summary>
+
+```console
+? Upload your SSH public key to your GitHub account? ~/.ssh/XXXX.pub
+```
+</details>
+
+<details>
+  <summary>Fournir un nom pour la clef publique :</summary>
+
+```console
+? Title for your SSH key: GitHub CLI
+```
+</details>
+
+<details>
+  <summary>Utiliser le navigateur pour authentifier GitHub CLI :</summary>
+
+```console
+? How would you like to authenticate GitHub CLI?  [Use arrows to move, type to filter]
+> Login with a web browser
+  Paste an authentication token
+```
+</details>
+
+
+<details>
+  <summary>Noter le code fourni et appuyer sur <kbd>entrée</kbd> pour ouvrir le navigateur web :</summary>
+
+```console
+! First copy your one-time code: XXXX-XXXX
+Press Enter to open github.com in your browser...
+```
+</details>
+
+Entrer le code d’activation :
+
+![Code d’activation GH CLI](./docs/gh_activation_otp.png)
+
+Autoriser l’application (GitHub CLI) à accéder au compte GitHub :
+
+![Autorisation pour GH CLI](./docs/gh_activation_authorization.png)
+
+Suivant la réussite du processus d’autorisation, un message sera affiché :
+
+![Activation de GH CLI](./docs/gh_activation_success.png)
+
+<details>
+  <summary>L’utilitaire affichera les actions posées :</summary>
+
+```console
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+✓ SSH key already existed on your GitHub account: ~/.ssh/XXXX.pub
+✓ Logged in as notetiene
+```
+</details>
