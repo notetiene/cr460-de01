@@ -16,6 +16,7 @@ Devoir 1 pour le cours CR460
       - [Connexion de GitHub CLI (`gh`) au compte GitHub](#connexion-de-github-cli-gh-au-compte-github)
     - [Création d’un dépôt local Git](#création-dun-dépôt-local-git)
       - [Ajout du premier commit](#ajout-du-premier-commit)
+    - [Création d’un dépôt distant avec GitHub](#création-dun-dépôt-distant-avec-github)
 
 <!-- markdown-toc end -->
 
@@ -449,3 +450,38 @@ git commit -m "Premier commit"
 ```
 
 > 💡 **Explications** : Cette commande créée un commit avec l’index courant en utilisant le message « Premier commit ».
+
+### Création d’un dépôt distant avec GitHub
+Pour créer un dépôt distant, `gh` a été utilisé.
+
+```bash
+REPO_NAME=cr460-de01
+gh repo create $REPO_NAME --public
+```
+
+<details>
+  <summary>Le dépôt a été créé :</summary>
+
+```console
+✓ Created repository notetiene/cr460-de01 on GitHub
+  https://github.com/notetiene/cr460-de01
+```
+</details>
+
+> 💡 **Explications** : Cette commande créée un dépôt Git public sur le compte lié de GitHub.
+
+Ajout d’une description au dépôt distant :
+
+```bash
+gh repo edit notetiene/cr460-de01 --description "Devoir 01 pour le cours CR460"
+```
+
+<details>
+  <summary>Résultats de la commande :</summary>
+
+```console
+✓ Edited repository notetiene/cr460-de01
+```
+</details>
+
+> 💡 **Explications** : Cette commande configure le message d’affichage du nouveau dépôt créé (GitHub).
