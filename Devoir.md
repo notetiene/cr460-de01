@@ -24,6 +24,7 @@ Devoir 1 pour le cours CR460
     - [Activation de Terraform cloud](#activation-de-terraform-cloud)
     - [Création d’une nouvelle organisation Terraform Cloud](#création-dune-nouvelle-organisation-terraform-cloud)
     - [Création d’un nouveau projet Terraform Cloud](#création-dun-nouveau-projet-terraform-cloud)
+    - [Création d’un espace de travail Terraform (_workspace_)](#création-dun-espace-de-travail-terraform-_workspace_)
   - [Configuration du compte Microsoft Azure](#configuration-du-compte-microsoft-azure)
     - [Installation de Azure CLI](#installation-de-azure-cli)
     - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
@@ -998,6 +999,155 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 > ⚠️ **Note :** Confirmer en entrant `yes`.
 
 > 💡 **Explications** : Terraform crée un projet dans Terraform Cloud dans l’organisation spécifiée.
+
+### Création d’un espace de travail Terraform (_workspace_)
+Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/project.tf](./terraform-cloud/project.tf).
+
+```terraform
+# Variable declaration with default values
+variable "workspace_name" {
+  type        = string
+  description = "Terraform project name."
+  default     = "cr460-de01-dev"
+}
+
+variable "workspace_tags" {
+  # Tags should be in the form ["tag1", "tag2", ...]
+  type        = list(string)
+  description = "Terraform project tags."
+  default     = ["polymtl", "dev"]
+}
+
+resource "tfe_workspace" "workspace" {
+  # The project the workspace will be member of
+  project_id   = tfe_project.project.id
+  name         = var.workspace_name
+  organization = tfe_organization.org.name
+  tag_names    = var.workspace_tags
+}
+```
+
+Exécuter localement :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME/terraform-cloud/
+terraform init
+terraform plan
+terraform apply
+```
+
+<details>
+  <summary>Résultats de l’exécution des commandes <code>terraform</code> :</summary>
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/tfe from the dependency lock file
+- Using previously-installed hashicorp/tfe v0.52.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_workspace.workspace will be created
+  + resource "tfe_workspace" "workspace" {
+      + agent_pool_id                 = (known after apply)
+      + allow_destroy_plan            = true
+      + auto_apply                    = false
+      + auto_apply_run_trigger        = false
+      + execution_mode                = (known after apply)
+      + file_triggers_enabled         = true
+      + force_delete                  = false
+      + global_remote_state           = (known after apply)
+      + html_url                      = (known after apply)
+      + id                            = (known after apply)
+      + name                          = "cr460-de01-dev"
+      + operations                    = (known after apply)
+      + organization                  = "polymtl-cr460"
+      + project_id                    = "prj-wmnphnD1QWmaxip6"
+      + queue_all_runs                = true
+      + remote_state_consumer_ids     = (known after apply)
+      + resource_count                = (known after apply)
+      + speculative_enabled           = true
+      + structured_run_output_enabled = true
+      + tag_names                     = [
+          + "dev",
+          + "polymtl",
+        ]
+      + terraform_version             = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactlytfe_organization.org: Refreshing state... [id=polymtl-cr460]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are  + create
+
+Terraform will perform the following actions:
+
+  # tfe_workspace.workspace will be created
+  + resource "tfe_workspace" "workspace" {
+      + agent_pool_id                 = (known after apply)
+      + allow_destroy_plan            = true
+      + auto_apply                    = false
+      + auto_apply_run_trigger        = false
+      + execution_mode                = (known after apply)
+      + file_triggers_enabled         = true
+      + force_delete                  = false
+      + global_remote_state           = (known after apply)
+      + html_url                      = (known after apply)
+      + id                            = (known after apply)
+      + name                          = "cr460-de01-dev"
+      + operations                    = (known after apply)
+      + organization                  = "polymtl-cr460"
+      + project_id                    = "prj-wmnphnD1QWmaxip6"
+      + queue_all_runs                = true
+      + remote_state_consumer_ids     = (known after apply)
+      + resource_count                = (known after apply)
+      + speculative_enabled           = true
+      + structured_run_output_enabled = true
+      + tag_names                     = [
+          + "dev",
+          + "polymtl",
+        ]
+      + terraform_version             = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+tfe_workspace.workspace: Creating...
+tfe_workspace.workspace: Creation complete after 0s [id=ws-55Pz9DZPACwiC5e8]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
+</details>
+
+> ⚠️ **Note :** Confirmer en entrant `yes`.
+
+> 💡 **Explications** : Terraform crée un espace de travail dans Terraform Cloud dans le projet spécifié.
 
 ## Configuration du compte Microsoft Azure
 ### Installation de Azure CLI
