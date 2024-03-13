@@ -32,6 +32,9 @@ Enfin, je crois que c’est le premier LIZEZMOI écrit en français (et mon dern
  5. [jq](https://jqlang.github.io/jq/)
     1. Installation
 
+## Livrable du devoir
+Le document à remettre du devoir est généré avec le fichier [Devoir.md](./Devoir.md).
+
 ## License
 
 cr460-de01 is free software: you can redistribute it and/or modify it
