@@ -21,6 +21,7 @@ Devoir 1 pour le cours CR460
   - [Terraform CLI et Terraform cloud](#terraform-cli-et-terraform-cloud)
     - [Installation de Terraform CLI](#installation-de-terraform-cli)
     - [Test de Terraform CLI](#test-de-terraform-cli)
+    - [Activation de Terraform cloud](#activation-de-terraform-cloud)
 
 <!-- markdown-toc end -->
 
@@ -664,3 +665,109 @@ Supprimer les fichiers d’initialisation :
 ```bash
 rm -Rf .terraform/ .terraform.lock.hcl
 ```
+
+### Activation de Terraform cloud
+Avec Terraform installé, enregistrer le compte _cloud_ avec l’utilitaire :
+
+```bash
+terraform login
+```
+
+<details>
+  <summary>Une confirmation sera demandée :</summary>
+
+```console
+If login is successful, Terraform will store the token in plain text in
+the following file for use by subsequent commands:
+    /home/etienne/.terraform.d/credentials.tfrc.json
+
+*Do you want to proceed?*
+  Only 'yes' will be accepted to confirm.
+
+  *Enter a value:* yes
+
+```
+</details>
+
+Entrer `yes`
+
+
+<details>
+  <summary>Un jeton sera demandé :</summary>
+
+```console
+---------------------------------------------------------------------------------
+
+Terraform must now open a web browser to the tokens page for app.terraform.io.
+
+If a browser does not open this automatically, open the following URL to proceed:
+    https://app.terraform.io/app/settings/tokens?source=terraform-login
+
+
+---------------------------------------------------------------------------------
+
+Generate a token using your browser, and copy-paste it into this prompt.
+
+Terraform will store the token in plain text in the following file
+for use by subsequent commands:
+    /home/etienne/.terraform.d/credentials.tfrc.json
+
+Token for app.terraform.io:
+  Enter a value: XXXXXX
+```
+</details>
+
+Terraform va ouvrir automatiquement le navigateur web.  Se connecter à Terraform :
+
+![Connexion Terraform cloud](./docs/terraform_cloud_login.png)
+
+Créer un jeton pour Terraform login :
+
+![Création jeton](./docs/terraform_cloud_login_token_creation.png)
+
+Prendre en note le jeton créé :
+
+![Création jeton](./docs/terraform_cloud_login_token_success.png)
+
+
+<details>
+  <summary>Entrer le jeton dans le champ demandé pour `terraform login` :</summary>
+
+```console
+---------------------------------------------------------------------------------
+Token for app.terraform.io:
+  Enter a value: XXXXXX
+
+
+Retrieved token for user notetiene
+
+
+---------------------------------------------------------------------------------
+
+                                          -
+                                          -----                           -
+                                          ---------                      --
+                                          ---------  -                -----
+                                           ---------  ------        -------
+                                             -------  ---------  ----------
+                                                ----  ---------- ----------
+                                                  --  ---------- ----------
+   Welcome to Terraform Cloud!                     -  ---------- -------
+                                                      ---  ----- ---
+   Documentation: terraform.io/docs/cloud             --------   -
+                                                      ----------
+                                                      ----------
+                                                       ---------
+                                                           -----
+                                                               -
+
+
+   New to TFC? Follow these steps to instantly apply an example configuration:
+
+   $ git clone https://github.com/hashicorp/tfc-getting-started.git
+   $ cd tfc-getting-started
+   $ scripts/setup.sh
+```
+</details>
+
+Terraform cloud peut maintenant être configuré localement.
