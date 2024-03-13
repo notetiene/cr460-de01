@@ -22,6 +22,7 @@ Devoir 1 pour le cours CR460
     - [Installation de Terraform CLI](#installation-de-terraform-cli)
     - [Test de Terraform CLI](#test-de-terraform-cli)
     - [Activation de Terraform cloud](#activation-de-terraform-cloud)
+    - [Création d’une nouvelle organisation Terraform Cloud](#création-dune-nouvelle-organisation-terraform-cloud)
   - [Configuration du compte Microsoft Azure](#configuration-du-compte-microsoft-azure)
     - [Installation de Azure CLI](#installation-de-azure-cli)
     - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
@@ -775,6 +776,125 @@ Retrieved token for user notetiene
 </details>
 
 Terraform cloud peut maintenant être configuré localement.
+
+### Création d’une nouvelle organisation Terraform Cloud
+Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/org.tf](./terraform-cloud/org.tf).
+
+```terraform
+# Variable declaration with default values
+variable "org_name" {
+  type        = string
+  description = "Terraform organization name."
+  default     = "polymtl-cr460"
+}
+
+variable "org_email" {
+  type        = string
+  description = "Terraform organization email."
+  default     = "e.e.f.prudhomme@gmail.com"
+}
+
+# Create a new terraform cloud organization
+resource "tfe_organization" "org" {
+  name  = var.org_name
+  email = var.org_email
+}
+```
+
+Exécuter localement :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME/terraform-cloud/
+terraform init
+terraform plan
+terraform apply
+```
+
+<details>
+  <summary>Résultats de l’exécution des commandes <code>terraform</code> :</summary>
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/tfe from the dependency lock file
+- Installing hashicorp/tfe v0.52.0...
+- Installed hashicorp/tfe v0.52.0 (signed by HashiCorp)
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_organization.org will be created
+  + resource "tfe_organization" "org" {
+      + aggregated_commit_status_enabled                        = (known after apply)
+      + allow_force_delete_workspaces                           = false
+      + collaborator_auth_policy                                = "password"
+      + cost_estimation_enabled                                 = (known after apply)
+      + default_project_id                                      = (known after apply)
+      + email                                                   = "e.e.f.prudhomme@gmail.com"
+      + id                                                      = (known after apply)
+      + name                                                    = "polymtl-cr460"
+      + send_passing_statuses_for_untriggered_speculative_plans = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take
+exactly these actions if you run "terraform apply" now.
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_organization.org will be created
+  + resource "tfe_organization" "org" {
+      + aggregated_commit_status_enabled                        = (known after apply)
+      + allow_force_delete_workspaces                           = false
+      + collaborator_auth_policy                                = "password"
+      + cost_estimation_enabled                                 = (known after apply)
+      + default_project_id                                      = (known after apply)
+      + email                                                   = "e.e.f.prudhomme@gmail.com"
+      + id                                                      = (known after apply)
+      + name                                                    = "polymtl-cr460"
+      + send_passing_statuses_for_untriggered_speculative_plans = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+tfe_organization.org: Creating...
+tfe_organization.org: Creation complete after 1s [id=polymtl-cr460]
+
+```
+</details>
+
+
+> ⚠️ **Note :** Confirmer en entrant `yes`.
+
+> 💡 **Explications** : Terraform crée une organisation dans Terraform Cloud en utilisant la configuration donnée.
 
 ## Configuration du compte Microsoft Azure
 ### Installation de Azure CLI
