@@ -14,6 +14,7 @@ Devoir 1 pour le cours CR460
     - [GitHub CLI](#github-cli)
       - [Installation de GitHub CLI](#installation-de-github-cli)
       - [Connexion de GitHub CLI (`gh`) au compte GitHub](#connexion-de-github-cli-gh-au-compte-github)
+    - [Création d’un dépôt local Git](#création-dun-dépôt-local-git)
 
 <!-- markdown-toc end -->
 
@@ -384,3 +385,22 @@ Suivant la réussite du processus d’autorisation, un message sera affiché :
 ✓ Logged in as notetiene
 ```
 </details>
+
+### Création d’un dépôt local Git
+Dans un répertoire, créer un dépôt git :
+
+```bash
+REPO_NAME=cr460-de01
+mkdir ~/$REPO_NAME && cd ~/$REPO_NAME
+git init
+```
+
+<details>
+  <summary>Résultats de la commande :</summary>
+
+```console
+Initialized empty Git repository in /home/etienne/cr460-de01/.git/
+```
+</details>
+
+> 💡 **Explications** : Cette commande crée et accède à un nouveau répertoire.  Un dépôt vide (Git) est par la suite initialisé.
