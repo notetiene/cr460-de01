@@ -16,7 +16,6 @@ variable "subscription_id" {
   type        = string
   sensitive   = true
 }
-
 variable "client_id" {
   description = "Azure client ID."
   type        = string
@@ -33,6 +32,7 @@ variable "tenant_id" {
   sensitive   = true
 }
 
+# Azure provider configuration
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id

@@ -37,6 +37,7 @@ Devoir 1 pour le cours CR460
     - [Ajout du fichier Terraform](#ajout-du-fichier-terraform)
   - [Arrimage et connexion entre Terraform cloud et MZ Azure](#arrimage-et-connexion-entre-terraform-cloud-et-mz-azure)
     - [Configuration du fournisseur Azure](#configuration-du-fournisseur-azure)
+    - [Configuration des clefs d’API d’Azure dans Terraform](#configuration-des-clefs-dapi-dazure-dans-terraform)
 
 <!-- markdown-toc end -->
 
@@ -1648,7 +1649,6 @@ variable "subscription_id" {
   type        = string
   sensitive   = true
 }
-
 variable "client_id" {
   description = "Azure client ID."
   type        = string
@@ -1665,6 +1665,7 @@ variable "tenant_id" {
   sensitive   = true
 }
 
+# Azure provider configuration
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id
@@ -1676,3 +1677,297 @@ provider "azurerm" {
 </details>
 
 > 💡 **Explications** : Terraform configure l’utilisation d’Azure comme fournisseur.
+
+### Configuration des clefs d’API d’Azure dans Terraform
+Afin de préserver la confidentialité du jeton (token) de l’API d’Azure, ceux-ci doivent être enregistrés dans les variables de Terraform Cloud (en mode « _sensitive_ »).
+
+> ⚠️ **Note :** Terraform (local) a été utilisé bien que cette procédure puisse être fait manuellement.
+
+Pour créer des variables dans Terraform Cloud ajouter ces blocs au fichier [terraform-cloud/terraform_secrets.tf](./terraform-cloud/terraform_secrets.tf).
+
+```terraform
+# Variable declaration with default values
+variable "subscription_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure subscription ID."
+}
+
+variable "client_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client ID."
+}
+
+variable "client_secret" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client secret."
+}
+
+variable "tenant_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure tenant ID."
+}
+
+resource "tfe_variable" "subscription_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "subscription_id"
+  value        = var.subscription_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_id"
+  value        = var.client_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_secret" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_secret"
+  value        = var.client_secret
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "tenant_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "tenant_id"
+  value        = var.tenant_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+```
+
+Exécuter localement :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME/terraform-cloud/
+terraform init
+terraform plan
+terraform apply
+```
+
+<details>
+  <summary>Résultats de l’exécution des commandes <code>terraform</code> :</summary>
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/tfe from the dependency lock file
+- Reusing previous version of hashicorp/github from the dependency lock file
+- Using previously-installed hashicorp/tfe v0.52.0
+- Using previously-installed hashicorp/github v6.1.0
+
+╷
+│ Warning: Additional provider information from registry
+│ 
+│ The remote registry returned warnings for registry.terraform.io/hashicorp/github:
+│ - For users on Terraform 0.13 or greater, this provider has moved to integrations/github. Please update your source in required_providers.
+╵
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+var.client_id
+  Azure client ID.
+
+  Enter a value: 
+
+var.client_secret
+  Azure client secret.
+
+  Enter a value: 
+
+var.subscription_id
+  Azure subscription ID.
+
+  Enter a value: 
+
+var.tenant_id
+  Azure tenant ID.
+
+  Enter a value: 
+
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+github_actions_secret.secret: Refreshing state... [id=cr460-de01:TF_API_TOKEN]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+tfe_workspace.workspace: Refreshing state... [id=ws-aoinY8mSK99GtrZQ]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_variable.client_id will be created
+  + resource "tfe_variable" "client_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "client_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.client_secret will be created
+  + resource "tfe_variable" "client_secret" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "client_secret"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.subscription_id will be created
+  + resource "tfe_variable" "subscription_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "subscription_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.tenant_id will be created
+  + resource "tfe_variable" "tenant_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "tenant_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+var.client_id
+  Azure client ID.
+
+  Enter a value: 
+
+var.client_secret
+  Azure client secret.
+
+  Enter a value: 
+
+var.subscription_id
+  Azure subscription ID.
+
+  Enter a value: 
+
+var.tenant_id
+  Azure tenant ID.
+
+  Enter a value: 
+
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+github_actions_secret.secret: Refreshing state... [id=cr460-de01:TF_API_TOKEN]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+tfe_workspace.workspace: Refreshing state... [id=ws-aoinY8mSK99GtrZQ]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tfe_variable.client_id will be created
+  + resource "tfe_variable" "client_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "client_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.client_secret will be created
+  + resource "tfe_variable" "client_secret" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "client_secret"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.subscription_id will be created
+  + resource "tfe_variable" "subscription_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "subscription_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+  # tfe_variable.tenant_id will be created
+  + resource "tfe_variable" "tenant_id" {
+      + category     = "terraform"
+      + hcl          = false
+      + id           = (known after apply)
+      + key          = "tenant_id"
+      + sensitive    = true
+      + value        = (sensitive value)
+      + workspace_id = "ws-aoinY8mSK99GtrZQ"
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+tfe_variable.client_secret: Creating...
+tfe_variable.subscription_id: Creating...
+tfe_variable.tenant_id: Creating...
+tfe_variable.client_id: Creating...
+tfe_variable.client_id: Creation complete after 0s [id=var-78n237UQUcRXkkYW]
+tfe_variable.tenant_id: Creation complete after 0s [id=var-NMdd4fHX1JMUVFk6]
+tfe_variable.subscription_id: Creation complete after 0s [id=var-VvJaMTy4nFis5ifi]
+tfe_variable.client_secret: Creation complete after 0s [id=var-eHxrtcHXxqnsHhda]
+
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+```
+</details>
+
+> ⚠️ **Note :** Les valeurs des variables Azure doivent être entrées.
+
+> ⚠️ **Note :** Confirmer en entrant `yes`.
+
+> 💡 **Explications** : Terraform configure des variables dans l’espace de travail de Terraform Cloud.
+
+![Variables dans l’espace de travail Terraform Cloud](./docs/terraform_workspace_variables.png)
