@@ -31,6 +31,7 @@ Devoir 1 pour le cours CR460
     - [Création du _service principal_](#création-du-_service-principal_)
   - [Arrimage et connexion entre Github et Terraform](#arrimage-et-connexion-entre-github-et-terraform)
     - [Création d’un jeton pour le dépôt GitHub dans Terraform](#création-dun-jeton-pour-le-dépôt-github-dans-terraform)
+    - [Configuration de l’espace de travail Terraform Cloud pour GitHub](#configuration-de-lespace-de-travail-terraform-cloud-pour-github)
 
 <!-- markdown-toc end -->
 
@@ -1326,4 +1327,54 @@ Entrer un nom de jeton (ici l’URL du dépôt GitHub) et sélectionner délais 
 Prendre en note le jeton :
 
 ![Valeur du jeton d’API Terraform Cloud](./docs/terraform_token_creation_value.png)
+
+### Configuration de l’espace de travail Terraform Cloud pour GitHub
+> ⚠️ **Note :** Bien qu’il soit possible de provisionner la connexion en utilisant l’outil Terraform lui-même, il s’agit d’un procédure dépassant largement le cadre de ce cours.  L’auteur manquait de temps pour utiliser cette méthode.
+
+Accéder à la page de connexion du _VCS_ dde l’espace de travail créé :
+
+```bash
+TF_ORG="polymtl-cr460"
+TF_WORKSPACE="cr460-de01-dev"
+xdg-open "https://app.terraform.io/app/${TF_ORG}/workspaces/${TF_WORKSPACE}/settings/version-control/edit"
+```
+
+Choisir « _Version Control Workflow_ » :
+
+![Version Control Workflow](./docs/terraform_create_workspace_vcs.png)
+
+Choisir « _GitHub_ » et « _GitHub.com_ » :
+
+[Version Control Workflow GitHub](./docs/terraform_create_workspace_github.png)
+
+Autoriser Terraform Cloud d’être une application tierce :
+
+![Autorisation GitHub pour Terraform Cloud (application)](./docs/terraform_github_authorization.png)
+
+Choisir le compte GitHub à utiliser :
+
+![Autorisation GitHub pour Terraform Cloud (compte)](./docs/terraform_github_authorization_select_account.png)
+
+Configurer les permission d’accès :
+
+ 1. Sélectionner « _Only select repositories_ »
+ 2. Cliquer sur « _Select repositories_ »
+ 3. Sélectionner le dépôt à utiliser (ici `cr460-de01`)
+ 4. Cliquer sur « Install »
+
+![Autorisation GitHub pour Terraform Cloud (accès)](./docs/terraform_github_authorization_select_repo.png)
+
+Sélectionner le dépôt maintenant disponible dans la fenêtre de Terraform Cloud :
+
+![Sélection du dépôt dans l’espace de travail Terraform cloud](./docs/terraform_workspace_select_repo.png)
+
+Cocher « _Auto-apply API, CLI, & VCS runs_ » et « _Auto-apply run triggers_ » :
+
+![Application automatique dans l’espace de travail Terraform cloud](./docs/terraform_workspace_auto_apply.png)
+
+> ⚠️ **Note :** Ces dernières options permettent d'appliquer automatiquement les modifications (sans intervention manuelle) lors de la poussée pipeline.
+
+Sauvegarder les changements :
+
+![Sauvegarde configuration de VCS l’espace de travail Terraform cloud](./docs/terraform_workspace_update_vcs.png)
 
