@@ -29,6 +29,8 @@ Devoir 1 pour le cours CR460
     - [Installation de Azure CLI](#installation-de-azure-cli)
     - [Connexion au compte Azure (utilitaire `az`)](#connexion-au-compte-azure-utilitaire-az)
     - [Création du _service principal_](#création-du-_service-principal_)
+  - [Arrimage et connexion entre Github et Terraform](#arrimage-et-connexion-entre-github-et-terraform)
+    - [Création d’un jeton pour le dépôt GitHub dans Terraform](#création-dun-jeton-pour-le-dépôt-github-dans-terraform)
 
 <!-- markdown-toc end -->
 
@@ -1303,3 +1305,25 @@ cat <(az ad sp create-for-rbac \
 </details>
 
 > 💡 **Explications** : La commande permet de créer un nouveau service principal et de récupérer des informations utile lors de l’arrimage de de Terraform et Azure.
+
+## Arrimage et connexion entre Github et Terraform
+### Création d’un jeton pour le dépôt GitHub dans Terraform
+
+Accéder à la page de création de jetons dans Terraform Cloud :
+
+```bash
+xdg-open https://app.terraform.io/app/settings/tokens
+```
+
+Cliquer sur « _Create an API token_ » :
+
+![Création d’un jeton d’API Terraform Cloud](./docs/terraform_token_creation_button.png)
+
+Entrer un nom de jeton (ici l’URL du dépôt GitHub) et sélectionner délais d’inactivation :
+
+![Nom du jeton d’API Terraform Cloud](./docs/terraform_token_creation_name.png)
+
+Prendre en note le jeton :
+
+![Valeur du jeton d’API Terraform Cloud](./docs/terraform_token_creation_value.png)
+
