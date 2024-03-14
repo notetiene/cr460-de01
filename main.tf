@@ -45,3 +45,21 @@ resource "azurerm_resource_group" "rg" {
   name     = "cr460-de01-rg"
   location = "Canada East"
 }
+
+resource "azurerm_virtual_network" "vnet" {
+  name                = "cr460-de01-vnet"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/16"]
+  dns_servers         = ["1.1.1.1", "1.0.0.1"]
+
+  subnet {
+    # P = #x50
+    name           = "PolyMTL"
+    address_prefix = "10.0.120.0/24"
+  }
+
+  tags = {
+    environment = "cr460"
+  }
+}

@@ -40,6 +40,7 @@ Devoir 1 pour le cours CR460
     - [Configuration des clefs d’API d’Azure dans Terraform](#configuration-des-clefs-dapi-dazure-dans-terraform)
     - [Pousser le dépôt](#pousser-le-dépôt)
   - [Déploiement de ressource groupe à partir de votre pipeline dans MS Azure](#déploiement-de-ressource-groupe-à-partir-de-votre-pipeline-dans-ms-azure)
+  - [Déploiement de Réseau Virtuel à partir de votre pipeline dans MS Azure](#déploiement-de-réseau-virtuel-à-partir-de-votre-pipeline-dans-ms-azure)
 
 <!-- markdown-toc end -->
 
@@ -2008,3 +2009,36 @@ resource "azurerm_resource_group" "rg" {
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
 ![Groupe de ressources créé par le pipeline](./docs/pipeline_resource_group.png)
+
+## Déploiement de Réseau Virtuel à partir de votre pipeline dans MS Azure
+Ajouter un groupe de ressources Azure dans la configuration Terraform.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+resource "azurerm_virtual_network" "vnet" {
+  name                = "cr460-de01-vnet"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/16"]
+  dns_servers         = ["1.1.1.1", "1.0.0.1"]
+
+  subnet {
+    # P = #x50
+    name           = "PolyMTL"
+    address_prefix = "10.0.120.0/24"
+  }
+
+  tags = {
+    environment = "cr460"
+  }
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform provisionne un réseau virtuel dans Azure.
+
+> ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
+
+![Réseau virtuel créé par le pipeline](./docs/pipeline_virtual_network.png)
