@@ -35,6 +35,8 @@ Devoir 1 pour le cours CR460
     - [Création d’un flux de travail GitHub (workflow)](#création-dun-flux-de-travail-github-workflow)
     - [Ajout du jeton Terraform à GitHub (secret)](#ajout-du-jeton-terraform-à-github-secret)
     - [Ajout du fichier Terraform](#ajout-du-fichier-terraform)
+  - [Arrimage et connexion entre Terraform cloud et MZ Azure](#arrimage-et-connexion-entre-terraform-cloud-et-mz-azure)
+    - [Configuration du fournisseur Azure](#configuration-du-fournisseur-azure)
 
 <!-- markdown-toc end -->
 
@@ -1631,3 +1633,46 @@ terraform {
 </details>
 
 > 💡 **Explications** : Ce fichier permet de lancer de déléguer l’exécution à Terraform Cloud en utilisant l’organisation et un espace de travail.
+
+## Arrimage et connexion entre Terraform cloud et MZ Azure
+### Configuration du fournisseur Azure
+Ajouter le founisseur Azure dans la configuration Terraform.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+# Azure variables
+variable "subscription_id" {
+  description = "Azure subscription ID."
+  type        = string
+  sensitive   = true
+}
+
+variable "client_id" {
+  description = "Azure client ID."
+  type        = string
+  sensitive   = true
+}
+variable "client_secret" {
+  description = "Azure client secret."
+  type        = string
+  sensitive   = true
+}
+variable "tenant_id" {
+  description = "Azure tenant ID."
+  type        = string
+  sensitive   = true
+}
+
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform configure l’utilisation d’Azure comme fournisseur.
