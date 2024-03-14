@@ -38,6 +38,7 @@ Devoir 1 pour le cours CR460
   - [Arrimage et connexion entre Terraform cloud et MZ Azure](#arrimage-et-connexion-entre-terraform-cloud-et-mz-azure)
     - [Configuration du fournisseur Azure](#configuration-du-fournisseur-azure)
     - [Configuration des clefs d’API d’Azure dans Terraform](#configuration-des-clefs-dapi-dazure-dans-terraform)
+    - [Pousser le dépôt](#pousser-le-dépôt)
 
 <!-- markdown-toc end -->
 
@@ -1971,3 +1972,19 @@ Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 > 💡 **Explications** : Terraform configure des variables dans l’espace de travail de Terraform Cloud.
 
 ![Variables dans l’espace de travail Terraform Cloud](./docs/terraform_workspace_variables.png)
+
+### Pousser le dépôt
+> ⚠️ **Note :** Cette étape suppose que le dossier courant (et l’index) été sauvegardé en faisant un commit.
+
+Pousser le dépôt courant pour tester l’arrimage du pipeline :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME
+git push
+```
+
+Voici une capture du pipeline jusqu’à présent :
+
+![Déploiement automatique par GitHub avec Terraform](./docs/terraform_github_triggered.png)
+
