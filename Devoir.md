@@ -32,6 +32,7 @@ Devoir 1 pour le cours CR460
   - [Arrimage et connexion entre Github et Terraform](#arrimage-et-connexion-entre-github-et-terraform)
     - [Création d’un jeton pour le dépôt GitHub dans Terraform](#création-dun-jeton-pour-le-dépôt-github-dans-terraform)
     - [Configuration de l’espace de travail Terraform Cloud pour GitHub](#configuration-de-lespace-de-travail-terraform-cloud-pour-github)
+    - [Création d’un flux de travail GitHub (workflow)](#création-dun-flux-de-travail-github-workflow)
 
 <!-- markdown-toc end -->
 
@@ -1378,3 +1379,77 @@ Sauvegarder les changements :
 
 ![Sauvegarde configuration de VCS l’espace de travail Terraform cloud](./docs/terraform_workspace_update_vcs.png)
 
+### Création d’un flux de travail GitHub (workflow)
+Lors de cet exercice, j’ai modifié partiellement le fichier de flux de travail [`setup-terraform`](https://github.com/hashicorp/setup-terraform).
+
+Voici une copie du fichier modifié :
+
+<details>
+  <summary><a href=".github/workflows/terraform.yml"><code>.github/workflows/terraform.yml</code></a></summary>
+
+```yaml
+---
+name: "Terraform"
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner
+    # is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Install the latest version of Terraform CLI and configure the
+      # Terraform CLI configuration file with a Terraform Cloud user
+      # API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      # Initialize a new or existing Terraform working directory by
+      # creating initial files, loading any remote state, downloading
+      # modules, etc.
+      - name: Terraform Init
+        run: terraform init
+
+      # Checks that all Terraform configuration files adhere to a
+      # canonical format
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+        # On push to "main", build or change infrastructure according
+        # to Terraform configuration files
+        #
+        # Note: It is recommended to set up a required "strict" status
+        # check in your repository for "Terraform Cloud". See the
+        # documentation on "strict" required status checks for more
+        # information:
+        # https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+```
+</details>
