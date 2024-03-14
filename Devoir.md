@@ -41,6 +41,8 @@ Devoir 1 pour le cours CR460
     - [Pousser le dépôt](#pousser-le-dépôt)
   - [Déploiement de ressource groupe à partir de votre pipeline dans MS Azure](#déploiement-de-ressource-groupe-à-partir-de-votre-pipeline-dans-ms-azure)
   - [Déploiement de Réseau Virtuel à partir de votre pipeline dans MS Azure](#déploiement-de-réseau-virtuel-à-partir-de-votre-pipeline-dans-ms-azure)
+  - [Déploiement d’une VM à partir de votre pipeline dans MS Azure](#déploiement-dune-vm-à-partir-de-votre-pipeline-dans-ms-azure)
+    - [Ajouter d’une interface réseau](#ajouter-dune-interface-réseau)
 
 <!-- markdown-toc end -->
 
@@ -2042,3 +2044,32 @@ resource "azurerm_virtual_network" "vnet" {
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
 ![Réseau virtuel créé par le pipeline](./docs/pipeline_virtual_network.png)
+
+## Déploiement d’une VM à partir de votre pipeline dans MS Azure
+### Ajouter d’une interface réseau
+Afin de pouvoir connecter la machine virtuelle au réseau virtuelle, il faut ajouter une interface de réseau.  L’interface de réseau utilisera le sous-réseau déjà configuré.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+resource "azurerm_network_interface" "nic0" {
+  name                = "cr460-de01-nic0"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  ip_configuration {
+    # Access inner subnet of virtual network
+    subnet_id                     = azurerm_virtual_network.vnet.subnet.*.id[0]
+    name                          = "conf"
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform provisionne une interface réseau.
+
+> ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
+
+![Interface réseau créée par le pipeline](./docs/pipeline_virtual_interface.png)

@@ -63,3 +63,16 @@ resource "azurerm_virtual_network" "vnet" {
     environment = "cr460"
   }
 }
+
+resource "azurerm_network_interface" "nic0" {
+  name                = "cr460-de01-nic0"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  ip_configuration {
+    # Access inner subnet of virtual network
+    subnet_id                     = azurerm_virtual_network.vnet.subnet.*.id[0]
+    name                          = "conf"
+    private_ip_address_allocation = "Dynamic"
+  }
+}
