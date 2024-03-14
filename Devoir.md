@@ -39,6 +39,7 @@ Devoir 1 pour le cours CR460
     - [Configuration du fournisseur Azure](#configuration-du-fournisseur-azure)
     - [Configuration des clefs d’API d’Azure dans Terraform](#configuration-des-clefs-dapi-dazure-dans-terraform)
     - [Pousser le dépôt](#pousser-le-dépôt)
+  - [Déploiement de ressource groupe à partir de votre pipeline dans MS Azure](#déploiement-de-ressource-groupe-à-partir-de-votre-pipeline-dans-ms-azure)
 
 <!-- markdown-toc end -->
 
@@ -1988,3 +1989,22 @@ Voici une capture du pipeline jusqu’à présent :
 
 ![Déploiement automatique par GitHub avec Terraform](./docs/terraform_github_triggered.png)
 
+## Déploiement de ressource groupe à partir de votre pipeline dans MS Azure
+Ajouter un groupe de ressources Azure dans la configuration Terraform.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+resource "azurerm_resource_group" "rg" {
+  name     = "cr460-de01-rg"
+  location = "Canada East"
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform provisionne un groupe de ressource dans Azure.
+
+> ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
+
+![Groupe de ressources créé par le pipeline](./docs/pipeline_resource_group.png)

@@ -40,3 +40,8 @@ provider "azurerm" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 }
+
+resource "azurerm_resource_group" "rg" {
+  name     = "cr460-de01-rg"
+  location = "Canada East"
+}
