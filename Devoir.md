@@ -43,6 +43,7 @@ Devoir 1 pour le cours CR460
   - [Déploiement de Réseau Virtuel à partir de votre pipeline dans MS Azure](#déploiement-de-réseau-virtuel-à-partir-de-votre-pipeline-dans-ms-azure)
   - [Déploiement d’une VM à partir de votre pipeline dans MS Azure](#déploiement-dune-vm-à-partir-de-votre-pipeline-dans-ms-azure)
     - [Ajouter d’une interface réseau](#ajouter-dune-interface-réseau)
+    - [Ajout d’une machine virtuelle](#ajout-dune-machine-virtuelle)
 
 <!-- markdown-toc end -->
 
@@ -2073,3 +2074,47 @@ resource "azurerm_network_interface" "nic0" {
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
 ![Interface réseau créée par le pipeline](./docs/pipeline_virtual_interface.png)
+
+### Ajout d’une machine virtuelle
+Un machine virtuelle de type linux (Azure) peut être provisionnée.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+resource "azurerm_linux_virtual_machine" "cr460-de01" {
+  name                            = "cr460-de01-vm"
+  resource_group_name             = azurerm_resource_group.rg.name
+  location                        = azurerm_resource_group.rg.location
+  size                            = "Standard_F2"
+  admin_username                  = "etienne"
+  disable_password_authentication = true
+  network_interface_ids = [
+    azurerm_network_interface.nic0.id,
+  ]
+
+  admin_ssh_key {
+    username   = "etienne"
+    public_key = file("./cr640-de01.pub")
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  os_disk {
+    storage_account_type = "Standard_LRS"
+    caching              = "ReadWrite"
+  }
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform provisionne une machine virtuelle dans Azure.
+
+> ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
+
+![Machine virtuelle créée par le pipeline](./docs/pipeline_ressource_virtual_machine.png)

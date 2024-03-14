@@ -76,3 +76,32 @@ resource "azurerm_network_interface" "nic0" {
     private_ip_address_allocation = "Dynamic"
   }
 }
+
+resource "azurerm_linux_virtual_machine" "vm" {
+  name                            = "cr460-de01-vm"
+  resource_group_name             = azurerm_resource_group.rg.name
+  location                        = azurerm_resource_group.rg.location
+  size                            = "Standard_F2"
+  admin_username                  = "etienne"
+  disable_password_authentication = true
+  network_interface_ids = [
+    azurerm_network_interface.nic0.id,
+  ]
+
+  admin_ssh_key {
+    username   = "etienne"
+    public_key = file("./cr640-de01.pub")
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  os_disk {
+    storage_account_type = "Standard_LRS"
+    caching              = "ReadWrite"
+  }
+}
