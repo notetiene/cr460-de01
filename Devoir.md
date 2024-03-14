@@ -34,6 +34,7 @@ Devoir 1 pour le cours CR460
     - [Configuration de l’espace de travail Terraform Cloud pour GitHub](#configuration-de-lespace-de-travail-terraform-cloud-pour-github)
     - [Création d’un flux de travail GitHub (workflow)](#création-dun-flux-de-travail-github-workflow)
     - [Ajout du jeton Terraform à GitHub (secret)](#ajout-du-jeton-terraform-à-github-secret)
+    - [Ajout du fichier Terraform](#ajout-du-fichier-terraform)
 
 <!-- markdown-toc end -->
 
@@ -1607,3 +1608,26 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 Vérification :
 
 ![Secret dans GitHub Actions](./docs/github_actions_secret.png)
+
+### Ajout du fichier Terraform
+Créer un fichier nommé `main.tf`
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code></a></summary>
+
+```terraform
+# Enforce using Terraform cloud
+terraform {
+  # Note: this block cannot take variables
+  backend "remote" {
+    organization = "polymtl-cr460"
+
+    workspaces {
+      name = "cr460-de01-dev"
+    }
+  }
+}
+```
+</details>
+
+> 💡 **Explications** : Ce fichier permet de lancer de déléguer l’exécution à Terraform Cloud en utilisant l’organisation et un espace de travail.
