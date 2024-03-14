@@ -33,6 +33,7 @@ Devoir 1 pour le cours CR460
     - [Création d’un jeton pour le dépôt GitHub dans Terraform](#création-dun-jeton-pour-le-dépôt-github-dans-terraform)
     - [Configuration de l’espace de travail Terraform Cloud pour GitHub](#configuration-de-lespace-de-travail-terraform-cloud-pour-github)
     - [Création d’un flux de travail GitHub (workflow)](#création-dun-flux-de-travail-github-workflow)
+    - [Ajout du jeton Terraform à GitHub (secret)](#ajout-du-jeton-terraform-à-github-secret)
 
 <!-- markdown-toc end -->
 
@@ -1453,3 +1454,156 @@ jobs:
         run: terraform apply -auto-approve -input=false
 ```
 </details>
+
+### Ajout du jeton Terraform à GitHub (secret)
+Afin de préserver la confidentialité du jeton (token) de l’API Terraform Cloud, celui-ci doit être enregistré dans les secrets du dépôt.
+
+Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/github_secrets.tf](./terraform-cloud/github_secrets.tf).
+
+```terraform
+# Variable declaration with default values
+variable "gh_repo" {
+  type        = string
+  description = "GitHub repository."
+  default     = "cr460-de01"
+}
+
+variable "secret_name" {
+  type        = string
+  description = "GitHub Actions secret name."
+  default     = "TF_API_TOKEN"
+}
+
+variable "secret_value" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "GitHub Actions secret value."
+}
+
+# Create a GitHub Actions secret on repository
+resource "github_actions_secret" "secret" {
+  repository      = var.gh_repo
+  secret_name     = var.secret_name
+  plaintext_value = var.secret_value
+}
+```
+
+Exécuter localement :
+
+```bash
+REPO_NAME=cr460-de01
+cd ~/$REPO_NAME/terraform-cloud/
+terraform init
+terraform plan
+terraform apply
+```
+
+<details>
+  <summary>Résultats de l’exécution des commandes <code>terraform</code> :</summary>
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/tfe from the dependency lock file
+- Reusing previous version of hashicorp/github from the dependency lock file
+- Using previously-installed hashicorp/tfe v0.52.0
+- Using previously-installed hashicorp/github v6.1.0
+
+╷
+│ Warning: Additional provider information from registry
+│ 
+│ The remote registry returned warnings for registry.terraform.io/hashicorp/github:
+│ - For users on Terraform 0.13 or greater, this provider has moved to integrations/github. Please
+│ update your source in required_providers.
+╵
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+var.secret_value
+  GitHub Actions secret value.
+
+  Enter a value: 
+
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+tfe_workspace.cr460-de01-dev: Refreshing state... [id=ws-55Pz9DZPACwiC5e8]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # github_actions_secret.secret will be created
+  + resource "github_actions_secret" "secret" {
+      + created_at  = (known after apply)
+      + id          = (known after apply)
+      + repository  = "cr460-de01"
+      + secret_name = "TF_API_TOKEN"
+      + updated_at  = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take
+exactly these actions if you run "terraform apply" now.
+var.secret_value
+  GitHub Actions secret value.
+
+  Enter a value: 
+
+tfe_organization.org: Refreshing state... [id=polymtl-cr460]
+tfe_project.project: Refreshing state... [id=prj-wmnphnD1QWmaxip6]
+tfe_workspace.cr460-de01-dev: Refreshing state... [id=ws-55Pz9DZPACwiC5e8]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions
+are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # github_actions_secret.secret will be created
+  + resource "github_actions_secret" "secret" {
+      + created_at      = (known after apply)
+      + id              = (known after apply)
+      + plaintext_value = (sensitive value)
+      + repository      = "cr460-de01"
+      + secret_name     = "TF_API_TOKEN"
+      + updated_at      = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+github_actions_secret.secret: Creating...
+github_actions_secret.secret: Creation complete after 2s [id=cr460-de01:TF_API_TOKEN]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
+</details>
+
+> ⚠️ **Note :** La valeur du jeton Terraform Cloud doit être entrée.
+
+> ⚠️ **Note :** Confirmer en entrant `yes`.
+
+> 💡 **Explications** : Terraform configure un secret nommé `TF_API_TOKEN` dans les secrets GitHub Actions dans le dépôt.
+
+Vérification :
+
+![Secret dans GitHub Actions](./docs/github_actions_secret.png)
