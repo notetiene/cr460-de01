@@ -44,6 +44,7 @@ Devoir 1 pour le cours CR460
   - [Déploiement d’une VM à partir de votre pipeline dans MS Azure](#déploiement-dune-vm-à-partir-de-votre-pipeline-dans-ms-azure)
     - [Ajouter d’une interface réseau](#ajouter-dune-interface-réseau)
     - [Ajout d’une machine virtuelle](#ajout-dune-machine-virtuelle)
+  - [Déploiement d’un container Docker à partir de votre pipeline dans MS Azure](#déploiement-dun-container-docker-à-partir-de-votre-pipeline-dans-ms-azure)
 
 <!-- markdown-toc end -->
 
@@ -2118,3 +2119,35 @@ resource "azurerm_linux_virtual_machine" "cr460-de01" {
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
 ![Machine virtuelle créée par le pipeline](./docs/pipeline_ressource_virtual_machine.png)
+
+## Déploiement d’un container Docker à partir de votre pipeline dans MS Azure
+Pour provisionner un conteneur, un groupe de conteneur doit aussi être déployé.
+
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code> (suite)</a></summary>
+
+```terraform
+resource "azurerm_container_group" "container" {
+  name                = "cr460-de01-containergroup"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "Linux"
+
+  container {
+    name   = "cr460-de01-container"
+    image  = "hello-world"
+    cpu    = "0.1"
+    memory = "0.1"
+  }
+
+  # Cannot be empty
+  ip_address_type = "Public"
+}
+```
+</details>
+
+> 💡 **Explications** : Terraform provisionne un groupe de conteneur ainsi qu’un conteneur
+
+> ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
+
+![Conteneur Docker créé par le pipeline](./docs/pipeline_docker_container.png)

@@ -105,3 +105,24 @@ resource "azurerm_linux_virtual_machine" "vm" {
     caching              = "ReadWrite"
   }
 }
+
+resource "azurerm_container_group" "container" {
+  name                = "example-containergroup"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "Linux"
+
+  container {
+    name   = "cr460-de01-container"
+    image  = "hello-world"
+    cpu    = "0.1"
+    memory = "0.1"
+
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
+  }
+
+  ip_address_type = "Public"
+}
