@@ -2,7 +2,7 @@ Devoir 1 pour le cours CR460
 ============================
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+**Table des matières**
 
 - [Devoir 1 pour le cours CR460](#devoir-1-pour-le-cours-cr460)
   - [Énoncé](#énoncé)
@@ -45,6 +45,10 @@ Devoir 1 pour le cours CR460
     - [Ajouter d’une interface réseau](#ajouter-dune-interface-réseau)
     - [Ajout d’une machine virtuelle](#ajout-dune-machine-virtuelle)
   - [Déploiement d’un container Docker à partir de votre pipeline dans MS Azure](#déploiement-dun-container-docker-à-partir-de-votre-pipeline-dans-ms-azure)
+  - [Annexes](#annexes)
+    - [Playbook Ansible](#playbook-ansible)
+    - [Terraform (partie locale)](#terraform-partie-locale)
+    - [Terraform (partie pipeline)](#terraform-partie-pipeline)
 
 <!-- markdown-toc end -->
 
@@ -796,7 +800,10 @@ Retrieved token for user notetiene
 Terraform cloud peut maintenant être configuré localement.
 
 ### Création d’une nouvelle organisation Terraform Cloud
-Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/org.tf](./terraform-cloud/org.tf).
+Pour créer un nouvelle organisation ajouter ces blocs au fichier.
+
+<details>
+  <summary><a href="./terraform-cloud/org.tf"><code>terraform-cloud/org.tf</code></a></summary>
 
 ```terraform
 # Variable declaration with default values
@@ -818,6 +825,7 @@ resource "tfe_organization" "org" {
   email = var.org_email
 }
 ```
+</details>
 
 Exécuter localement :
 
@@ -915,7 +923,10 @@ tfe_organization.org: Creation complete after 1s [id=polymtl-cr460]
 > 💡 **Explications** : Terraform crée une organisation dans Terraform Cloud en utilisant la configuration donnée.
 
 ### Création d’un nouveau projet Terraform Cloud
-Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/project.tf](./terraform-cloud/project.tf).
+Pour créer un nouvelle organisation ajouter ces blocs au fichier.
+
+<details>
+  <summary><a href="./terraform-cloud/project.tf"><code>terraform-cloud/project.tf</code></a></summary>
 
 ```terraform
 # Variable declaration with default values
@@ -931,6 +942,7 @@ resource "tfe_project" "project" {
   name         = var.project_name
 }
 ```
+</details>
 
 Exécuter localement :
 
@@ -1017,7 +1029,10 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 > 💡 **Explications** : Terraform crée un projet dans Terraform Cloud dans l’organisation spécifiée.
 
 ### Création d’un espace de travail Terraform (_workspace_)
-Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/project.tf](./terraform-cloud/project.tf).
+Pour créer un nouvelle organisation ajouter ces blocs au fichier.
+
+<details>
+  <summary><a href="./terraform-cloud/workspace.tf"><code>terraform-cloud/workspace.tf</code></a></summary>
 
 ```terraform
 # Variable declaration with default values
@@ -1042,6 +1057,7 @@ resource "tfe_workspace" "workspace" {
   tag_names    = var.workspace_tags
 }
 ```
+</details>
 
 Exécuter localement :
 
@@ -1469,7 +1485,10 @@ jobs:
 ### Ajout du jeton Terraform à GitHub (secret)
 Afin de préserver la confidentialité du jeton (token) de l’API Terraform Cloud, celui-ci doit être enregistré dans les secrets du dépôt.
 
-Pour créer un nouvelle organisation ajouter ces blocs au fichier [terraform-cloud/github_secrets.tf](./terraform-cloud/github_secrets.tf).
+Pour créer un nouvelle organisation ajouter ces blocs au fichier.
+
+<details>
+  <summary><a href="./terraform-cloud/github_secrets.tf"><code>terraform-cloud/github_secrets.tf</code></a></summary>
 
 ```terraform
 # Variable declaration with default values
@@ -1499,6 +1518,7 @@ resource "github_actions_secret" "secret" {
   plaintext_value = var.secret_value
 }
 ```
+</details>
 
 Exécuter localement :
 
@@ -1690,7 +1710,10 @@ Afin de préserver la confidentialité du jeton (token) de l’API d’Azure, ce
 
 > ⚠️ **Note :** Terraform (local) a été utilisé bien que cette procédure puisse être fait manuellement.
 
-Pour créer des variables dans Terraform Cloud ajouter ces blocs au fichier [terraform-cloud/terraform_secrets.tf](./terraform-cloud/terraform_secrets.tf).
+Pour créer des variables dans Terraform Cloud ajouter ces blocs au fichier.
+
+<details>
+  <summary><a href="./terraform-cloud/terraform_secrets.tf"><code>terraform-cloud/terraform_secrets.tf</code></a></summary>
 
 ```terraform
 # Variable declaration with default values
@@ -1758,6 +1781,7 @@ resource "tfe_variable" "tenant_id" {
   workspace_id = tfe_workspace.workspace.id
 }
 ```
+</details>
 
 Exécuter localement :
 
@@ -2118,7 +2142,7 @@ resource "azurerm_linux_virtual_machine" "cr460-de01" {
 
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
-![Machine virtuelle créée par le pipeline](./docs/pipeline_ressource_virtual_machine.png)
+![Machine virtuelle créée par le pipeline](./docs/pipeline_virtual_machine.png)
 
 ## Déploiement d’un container Docker à partir de votre pipeline dans MS Azure
 Pour provisionner un conteneur, un groupe de conteneur doit aussi être déployé.
@@ -2151,3 +2175,391 @@ resource "azurerm_container_group" "container" {
 > ⚠️ **Note :** Ne pas oublier de pousser les changements pour activer le pipeline.
 
 ![Conteneur Docker créé par le pipeline](./docs/pipeline_docker_container.png)
+
+## Annexes
+### Playbook Ansible
+<details>
+  <summary><a href="./playbook.yml"><code>playbook.yml</code></a></summary>
+
+```yaml
+---
+- name: Installation des logiciels du DE01 cours CR460
+  hosts: localhost
+  tasks:
+    - name: Installation de VSCode
+      become: yes
+      snap:
+        name: code
+        channel: latest/stable
+        state: present
+        classic: yes
+      tags:
+        - vscode
+
+    - name: Installation de GitHub Desktop sur Ubuntu (pas de canal officiel)
+      block:
+        - name: Téléchargement de la clef PGP du dépôt
+          become: yes
+          apt_key:
+            url: https://apt.packages.shiftkey.dev/gpg.key
+            keyring: /usr/share/keyrings/ansible_shiftkey_repo-archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt GitHub Desktop
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_shiftkey_repo-archive-keyring.gpg]
+              https://apt.packages.shiftkey.dev/ubuntu/
+              any
+              main
+            filename: ansible_shiftkey_repo
+            state: present
+        - name: Installation de GitHub Desktop
+          become: yes
+          package:
+            name: github-desktop
+            state: latest
+      tags:
+        - github-desktop
+
+    - name: Installation de GitHub CLI sur Ubuntu
+      block:
+        - name: Téléchargement de la clef PGP du dépôt
+          become: yes
+          apt_key:
+            url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+            keyring: /usr/share/keyrings/ansible_githubcli_repo-archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt GitHub CLI
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_githubcli_repo-archive-keyring.gpg]
+              https://cli.github.com/packages
+              stable
+              main
+            filename: ansible_shiftkey_repo
+            state: present
+        - name: Installation de GitHub CLI
+          become: yes
+          package:
+            name: gh
+            state: latest
+      tags:
+        - github-cli
+
+    - name: Installation de Terraform
+      block:
+        - name: Téléchargement de la clef PGP de HashiCorp
+          become: yes
+          apt_key:
+            url: https://apt.releases.hashicorp.com/gpg
+            keyring: /usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt de HashiCorp
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_hashicorp_archive-keyring.gpg]
+              https://apt.releases.hashicorp.com
+              {{ ansible_distribution_release }}
+              main
+            filename: ansible_hashicorp
+            state: present
+        - name: Installation de Terraform
+          become: yes
+          package:
+            name: terraform
+            state: latest
+      tags:
+        - terraform
+
+    - name: Installation de Azure CLI
+      block:
+        - name: Téléchargement de la clef PGP de Microsoft
+          become: yes
+          apt_key:
+            url: https://packages.microsoft.com/keys/microsoft.asc
+            keyring: /usr/share/keyrings/ansible_microsoft_archive-keyring.gpg
+            state: present
+        - name: Ajout du dépôt de Azure CLI
+          become: yes
+          apt_repository:
+            repo: >-
+              deb
+              [arch=amd64 signed-by=/usr/share/keyrings/ansible_microsoft_archive-keyring.gpg]
+              https://packages.microsoft.com/repos/azure-cli/
+              {{ ansible_distribution_release }}
+              main
+            filename: ansible_microsoft_azure-cli
+            state: present
+        - name: Installation de Azure CLI
+          become: yes
+          package:
+            name: azure-cli
+            state: latest
+      tags:
+        - azure-cli
+
+    - name: Installation de jq
+      become: yes
+      package:
+        name: jq
+        state: latest
+      tags:
+        - jq
+```
+</details>
+
+### Terraform (partie locale)
+
+<details>
+  <summary><a href="./terraform-cloud/org.tf"><code>terraform-cloud/org.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "org_name" {
+  type        = string
+  description = "Terraform organization name."
+  default     = "polymtl-cr460"
+}
+
+variable "org_email" {
+  type        = string
+  description = "Terraform organization email."
+  default     = "e.e.f.prudhomme@gmail.com"
+}
+
+# Create a new terraform cloud organization
+resource "tfe_organization" "org" {
+  name  = var.org_name
+  email = var.org_email
+}
+```
+</details>
+
+<details>
+  <summary><a href="./terraform-cloud/project.tf"><code>terraform-cloud/project.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "project_name" {
+  type        = string
+  description = "Terraform project."
+  default     = "cr460-de01"
+}
+
+# Create a new terraform cloud project
+resource "tfe_project" "project" {
+  organization = tfe_organization.org.name
+  name         = var.project_name
+}
+```
+</details>
+
+<details>
+  <summary><a href="./terraform-cloud/workspace.tf"><code>terraform-cloud/workspace.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "workspace_name" {
+  type        = string
+  description = "Terraform project name."
+  default     = "cr460-de01-dev"
+}
+
+variable "workspace_tags" {
+  # Tags should be in the form ["tag1", "tag2", ...]
+  type        = list(string)
+  description = "Terraform project tags."
+  default     = ["polymtl", "dev"]
+}
+
+resource "tfe_workspace" "workspace" {
+  # The project the workspace will be member of
+  project_id   = tfe_project.project.id
+  name         = var.workspace_name
+  organization = tfe_organization.org.name
+  tag_names    = var.workspace_tags
+}
+```
+</details>
+
+<details>
+  <summary><a href="./terraform-cloud/github_secrets.tf"><code>terraform-cloud/github_secrets.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "gh_repo" {
+  type        = string
+  description = "GitHub repository."
+  default     = "cr460-de01"
+}
+
+variable "secret_name" {
+  type        = string
+  description = "GitHub Actions secret name."
+  default     = "TF_API_TOKEN"
+}
+
+variable "secret_value" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "GitHub Actions secret value."
+}
+
+# Create a GitHub Actions secret on repository
+resource "github_actions_secret" "secret" {
+  repository      = var.gh_repo
+  secret_name     = var.secret_name
+  plaintext_value = var.secret_value
+}
+```
+</details>
+
+<details>
+  <summary><a href="./terraform-cloud/terraform_secrets.tf"><code>terraform-cloud/terraform_secrets.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "subscription_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure subscription ID."
+}
+
+variable "client_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client ID."
+}
+
+variable "client_secret" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client secret."
+}
+
+variable "tenant_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure tenant ID."
+}
+
+resource "tfe_variable" "subscription_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "subscription_id"
+  value        = var.subscription_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_id"
+  value        = var.client_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_secret" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_secret"
+  value        = var.client_secret
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "tenant_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "tenant_id"
+  value        = var.tenant_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+```
+</details>
+
+### Terraform (partie pipeline)
+<details>
+  <summary><a href="./main.tf"><code>main.tf</code></a></summary>
+
+```terraform
+# Variable declaration with default values
+variable "subscription_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure subscription ID."
+}
+
+variable "client_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client ID."
+}
+
+variable "client_secret" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure client secret."
+}
+
+variable "tenant_id" {
+  # The value should not be displayed
+  sensitive   = true
+  type        = string
+  description = "Azure tenant ID."
+}
+
+resource "tfe_variable" "subscription_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "subscription_id"
+  value        = var.subscription_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_id"
+  value        = var.client_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "client_secret" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "client_secret"
+  value        = var.client_secret
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+
+resource "tfe_variable" "tenant_id" {
+  # The value should not be displayed
+  sensitive    = true
+  key          = "tenant_id"
+  value        = var.tenant_id
+  category     = "terraform"
+  workspace_id = tfe_workspace.workspace.id
+}
+```
+</details>
